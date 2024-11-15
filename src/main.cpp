@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <fstream>
+#include <sstream>
 #include "nayuki-qr/qrcodegen.hpp"
 #include "webserver.hpp"
 #include "dataloader.hpp"
@@ -42,7 +44,19 @@ int main(int argc, char* argv[]) {
 
     //webserver(fname, loadFile(fname));
 
-    std::string host = "192.168.1.204:8080";
+    std::string host;
+    std::ifstream hostFile("host.txt");
+    if (!hostFile.is_open())
+    {
+        std::cerr << "Unable to open host.txt\n";
+        exit(1);
+    }
+
+    std::ostringstream sstr;
+    sstr << hostFile.rdbuf();
+    host = sstr.str();
+
+    std::cout << "Read host: " << host << '\n';
 
 
 
