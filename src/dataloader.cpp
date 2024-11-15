@@ -4,7 +4,7 @@
 
 std::string loadFile(std::string filename)
 {
-    std::ifstream file(filename);
+    std::ifstream file(filename, std::ios::binary);
     if (!file.is_open())
     {
         std::cerr << "Unable to open file " + filename + "\n";
