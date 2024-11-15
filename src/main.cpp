@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
-#include "qrcodegen.hpp"
+#include "nayuki-qr/qrcodegen.hpp"
 #include "webserver.hpp"
 #include "dataloader.hpp"
 
