@@ -17,6 +17,14 @@ char QR_0_STR[2] = {(char)32, (char)32};
 
 typedef std::pair<std::string, unsigned int> HOST;
 
+std::string getParentDirectory(const std::string& fullPath) {
+    size_t lastSlashPos = fullPath.find_last_of("\\/");
+    if (lastSlashPos != std::string::npos) {
+        return fullPath.substr(0, lastSlashPos + 1); // Include trailing slash
+    }
+    return "";
+}
+
 HOST getHost(std::string filename)
 {
     HOST host;
@@ -57,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     std::string data = loadFile(fname);
 
-    HOST host = getHost("host.txt");
+    HOST host = getHost(getParentDirectory(argv[0]) + "host.txt");
 
     std::thread web_thread(webserver, fname, data, host.second);
 
