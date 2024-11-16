@@ -12,7 +12,7 @@ src/</br>
 &emsp;&emsp;include/</br>
 &emsp;&emsp;lib/</br>
 &emsp;&emsp;...</br>
-Then, copy the following to the executable directory:</br>
+Then, copy the following from SFML-2.6.2/bin to the executable directory:</br>
  - sfml-graphics-2.dll
  - sfml-system-2.dll
  - sfml-window-2.dll
