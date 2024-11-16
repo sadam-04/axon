@@ -6,7 +6,6 @@
 #include <vector>
 
 #pragma comment(lib, "Ws2_32.lib")
-#define PORT 8080
 
 std::string shortenPath(std::string path)
 {
@@ -30,7 +29,6 @@ std::string parseRequestPath(char* cbuf)
 
     std::string path;
     stream >> path;
-    std::cout << "Request Path: " << path << '\n';
 
     return path;
 }
@@ -46,7 +44,7 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data) {
         return;
     }
 
-    buffer[bytesReceived] = '\0'; // Null-terminate the buffer
+    buffer[bytesReceived] = '\0';
 
     // Simple HTTP response
     std::string response_body =
@@ -60,47 +58,29 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data) {
         "";
 
     std::string reqPath = parseRequestPath(buffer);
-    if (reqPath == std::string("/file" /*+ filename*/))
+    if (reqPath == std::string("/file"))
     {
-        std::cout << "DOWNLOAD FILE!!!!!!!!!\n";
         response_type = "application/octet-stream";
-        //response_body = filename;
         response_body = data;
         dlname = "Content-Disposition: attachment; filename=" + shortenPath(filename) + "\r\n";
     }
-    else
-    {
-        std::cout << "reqPath: " + reqPath + '\n';
-        std::cout << "filename: " + std::string("/" + filename) + '\n';
-    }
 
-    std::string resp2 = "more data nevergoon";
-
-    std::cout << "\n\n" << filename << "\n\n";
-
-    //application/octet-stream
     std::string httpResponse =
         "HTTP/1.1 200 OK\r\n"
         "Content-Type: " + response_type + "\r\n"
-        "Content-Length: " + std::to_string(response_body.size() /*+ resp2.size()*/) + "\r\n"
+        "Content-Length: " + std::to_string(response_body.size()) + "\r\n"
         + dlname
         + "Connection: close\r\n\r\n"
         + response_body;
 
-    std::cout << "\n\n\nSENDING RESPONSE:\n" << httpResponse << "\n\n\n\n";
-
-    // Log the request
-    std::cout << "Received request:\n" << buffer << std::endl;
-
     // Send the response to the client
     send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
-    //send(clientSocket, resp2.c_str(), resp2.size(), 0);
 
     // Close the client socket
     closesocket(clientSocket);
 }
 
-int webserver(std::string filename, std::string data) {
+int webserver(std::string filename, std::string data, unsigned int port) {
     WSADATA wsaData;
     SOCKET serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
@@ -123,7 +103,7 @@ int webserver(std::string filename, std::string data) {
     // Setup the server address structure
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_port = htons(PORT);
+    serverAddr.sin_port = htons(port);
 
     // Bind the socket
     if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
@@ -141,7 +121,7 @@ int webserver(std::string filename, std::string data) {
         return 1;
     }
 
-    std::cout << "Server is listening on port " << PORT << std::endl;
+    std::cout << "Server is listening on port " << port << std::endl;
 
     std::vector<std::thread> responses;
 

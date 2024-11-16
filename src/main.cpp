@@ -12,6 +12,27 @@ char QR_0_STR[2] = {(char)32, (char)32};
 
 #define QR_FALSE
 
+typedef std::pair<std::string, unsigned int> HOST;
+
+HOST getHost(std::string filename)
+{
+    HOST host;
+    
+    std::ifstream hostFile(filename);
+    if (!hostFile.is_open())
+    {
+        std::cerr << "Unable to open " << filename << "\n";
+        exit(1);
+    }
+
+    hostFile >> host.first;
+    std::string portbuf;
+    hostFile >> portbuf;
+    host.second = std::stoi(portbuf);
+
+    return host;
+}
+
 int main(int argc, char* argv[]) {
 
     std::string fname;
@@ -34,33 +55,9 @@ int main(int argc, char* argv[]) {
 
     std::string data = loadFile(fname);
 
-    //fname = "file";
+    HOST host = getHost("host.txt");
 
-
-
-    ///////////
-    //fname = "file.txt";
-    ///////////
-
-    //webserver(fname, loadFile(fname));
-
-    std::string host;
-    std::ifstream hostFile("host.txt");
-    if (!hostFile.is_open())
-    {
-        std::cerr << "Unable to open host.txt\n";
-        exit(1);
-    }
-
-    std::ostringstream sstr;
-    sstr << hostFile.rdbuf();
-    host = sstr.str();
-
-    std::cout << "Read host: " << host << '\n';
-
-
-
-    std::string url = "http://" + host + "/file";
+    std::string url = "http://" + host.first + ":" + std::to_string(host.second) + "/file";
 
     // Create a QR Code object
     qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(url.c_str(), qrcodegen::QrCode::Ecc::LOW);
@@ -74,9 +71,7 @@ int main(int argc, char* argv[]) {
         std::cout << std::endl;
     }
 
-    std::thread webserver_thread(webserver, fname, data);
-
-    webserver_thread.join();
+    webserver(fname, data, host.second);
 
     return 0;
 }
