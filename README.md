@@ -19,6 +19,6 @@ Then, copy the following to the executable directory:
 
  Finally, create a file called host.txt also in the executable directory. The first line should contain the host ip address to encode in the QR code. The second line should be the port. Example:
  ```
-192.168.1.1
+192.168.1.20
 8080
  ```
