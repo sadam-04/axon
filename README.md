@@ -12,3 +12,7 @@ src/
         include/
         lib/
         ...
+Then, copy the following to /out:
+ - sfml-graphics-2.dll
+ - sfml-system-2.dll
+ - sfml-window-2.dll
