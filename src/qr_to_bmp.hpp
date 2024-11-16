@@ -1,0 +1,1 @@
+std::string makebmp(qrcodegen::QrCode qr);

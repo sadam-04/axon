@@ -121,8 +121,6 @@ int webserver(std::string filename, std::string data, unsigned int port) {
         return 1;
     }
 
-    std::cout << "Server is listening on port " << port << std::endl;
-
     std::vector<std::thread> responses;
 
     // Main server loop
