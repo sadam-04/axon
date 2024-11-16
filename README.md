@@ -12,7 +12,13 @@ src/
         include/
         lib/
         ...
-Then, copy the following to /out:
+Then, copy the following to the executable directory:
  - sfml-graphics-2.dll
  - sfml-system-2.dll
  - sfml-window-2.dll
+
+ Finally, create a file called host.txt also in the executable directory. The first line should contain the host ip address to encode in the QR code. The second line should be the port. Example:
+ ```
+192.168.1.1
+8080
+ ```
