@@ -66,12 +66,9 @@ int main(int argc, char* argv[]) {
     // Create a QR Code object
     qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(url.c_str(), qrcodegen::QrCode::Ecc::LOW);
 
-    std::ofstream oFile("qr.bmp", std::ios::binary);
     std::string bmpdata = makebmp(qr);
-    oFile.write(bmpdata.c_str(), bmpdata.size());
-    oFile.close();
 
-    std::thread sfml_thread(showBMP, "qr.bmp");
+    std::thread sfml_thread(showBMP, bmpdata);
 
     sfml_thread.join();
 

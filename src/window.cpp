@@ -1,13 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-int showBMP(std::string bmpfile) {
+int showBMP(std::string bmpdata) {
     // Create a window
     sf::RenderWindow window(sf::VideoMode(500, 500), "Axon");
 
     // Load the BMP image into a texture
     sf::Texture texture;
-    if (!texture.loadFromFile(bmpfile)) {
+    if (!texture.loadFromMemory(bmpdata.c_str(), bmpdata.size())) {
         std::cerr << "Error: Could not load image file!" << std::endl;
         return 1;
     }
