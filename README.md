@@ -2,17 +2,17 @@
 Quick and lightweight file transfer tool.
 
 # Setup
-Install SFML 2.6.2 to src/SFML-2.6.2
-Directory structure should look like this:
-src/
-    SFML-2.6.2/
-        bin/
-        doc/
-        examples/
-        include/
-        lib/
-        ...
-Then, copy the following to the executable directory:
+Install SFML 2.6.2 to src/SFML-2.6.2</br>
+Directory structure should look like this:</br>
+src/</br>
+&emsp;SFML-2.6.2/</br>
+&emsp;&emsp;bin/</br>
+&emsp;&emsp;doc/</br>
+&emsp;&emsp;examples/</br>
+&emsp;&emsp;include/</br>
+&emsp;&emsp;lib/</br>
+&emsp;&emsp;...</br>
+Then, copy the following from SFML-2.6.2/bin to the executable directory:</br>
  - sfml-graphics-2.dll
  - sfml-system-2.dll
  - sfml-window-2.dll
