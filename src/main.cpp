@@ -1,21 +1,24 @@
+#include <winsock2.h>
+#include <windows.h>
 #include <iostream>
 #include <string>
 #include <thread>
 #include <fstream>
 #include <sstream>
-#include <Windows.h>
 #include "nayuki-qr/qrcodegen.hpp"
 #include "webserver.hpp"
 #include "dataloader.hpp"
 #include "qr_to_bmp.hpp"
 #include "window.hpp"
+#include "gethost.hpp"
+
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "iphlpapi.lib")
 
 char QR_1_STR[2] = {(char)219, (char)219};
 char QR_0_STR[2] = {(char)32, (char)32};
 
 #define QR_FALSE
-
-typedef std::pair<std::string, unsigned int> HOST;
 
 std::string getParentDirectory(const std::string& fullPath) {
     size_t lastSlashPos = fullPath.find_last_of("\\/");
@@ -23,25 +26,6 @@ std::string getParentDirectory(const std::string& fullPath) {
         return fullPath.substr(0, lastSlashPos + 1); // Include trailing slash
     }
     return "";
-}
-
-HOST getHost(std::string filename)
-{
-    HOST host;
-    
-    std::ifstream hostFile(filename);
-    if (!hostFile.is_open())
-    {
-        std::cerr << "Unable to open " << filename << "\n";
-        exit(1);
-    }
-
-    hostFile >> host.first;
-    std::string portbuf;
-    hostFile >> portbuf;
-    host.second = std::stoi(portbuf);
-
-    return host;
 }
 
 int main(int argc, char* argv[]) {
@@ -67,7 +51,8 @@ int main(int argc, char* argv[]) {
 
     HOST host = getHost(getParentDirectory(argv[0]) + "host.txt");
 
-    std::thread web_thread(webserver, fname, data, host.second);
+
+    std::thread ws_thread(webserver, fname, data, host.second);
 
     std::string url = "http://" + host.first + ":" + std::to_string(host.second) + "/file";
 
