@@ -3,9 +3,35 @@
 #include <iphlpapi.h>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include "gethost.hpp"
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
+
+HOST getHost(std::string filename)
+{
+    HOST host;
+    
+    std::ifstream hostFile(filename);
+    if (!hostFile.is_open())
+    {
+        std::cout << "Unable to open host.txt\nAttempting to get primary adapter ip...";
+        host.first = GetLANIPAddress();
+        if (host.first.empty())
+        {
+            std::cout << "FAILED\n";
+            std::cerr << "Unable to open host.txt, and failed to determine primary adapter ip. Ensure that host.txt exists in the same directory as the Axon executable.";
+        }
+    }
+
+    hostFile >> host.first;
+    std::string portbuf;
+    hostFile >> portbuf;
+    host.second = std::stoi(portbuf);
+
+    return host;
+}
 
 std::string GetLANIPAddress() {
     ULONG bufferSize = 0;
