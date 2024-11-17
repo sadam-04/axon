@@ -23,6 +23,8 @@ HOST getHost(std::string filename)
             std::cout << "FAILED\n";
             std::cerr << "Unable to open host.txt, and failed to determine primary adapter ip. Ensure that host.txt exists in the same directory as the Axon executable.";
         }
+        host.second = 8080;
+        return host;
     }
 
     hostFile >> host.first;
