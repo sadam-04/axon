@@ -1,1 +1,1 @@
-int showBMP(std::string bmpfile);
+int showBMP(std::string bmpfile, std::string filename, std::string url);

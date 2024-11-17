@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 
     std::string bmpdata = makebmp(qr);
 
-    std::thread sfml_thread(showBMP, bmpdata);
+    std::thread sfml_thread(showBMP, bmpdata, fname, url);
 
     sfml_thread.join();
 
