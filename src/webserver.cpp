@@ -33,7 +33,7 @@ std::string parseRequestPath(char* cbuf)
     return path;
 }
 
-void handleClient(SOCKET clientSocket, std::string filename, std::string data) {
+void handleClient(SOCKET clientSocket, std::string filename, std::string data, std::string url_path) {
     // Buffer for receiving data
     char buffer[1024] = {0};
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
@@ -58,7 +58,7 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data) {
         "";
 
     std::string reqPath = parseRequestPath(buffer);
-    if (reqPath == std::string("/file"))
+    if (reqPath == std::string(url_path))
     {
         response_type = "application/octet-stream";
         response_body = data;
@@ -80,7 +80,7 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data) {
     closesocket(clientSocket);
 }
 
-int webserver(std::string filename, std::string data, unsigned int port) {
+int webserver(std::string filename, std::string data, unsigned int port, std::string url_path) {
     WSADATA wsaData;
     SOCKET serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
@@ -133,7 +133,7 @@ int webserver(std::string filename, std::string data, unsigned int port) {
         }
 
         // Handle the client request
-        responses.push_back(std::thread(handleClient, clientSocket, filename, data));
+        responses.push_back(std::thread(handleClient, clientSocket, filename, data, url_path));
     }
 
     // Cleanup
