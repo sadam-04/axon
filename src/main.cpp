@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
 
     std::string url_path = '/' + randomPath();
     
-    std::thread ws_thread(webserver, fname, data, host.second, url_path);
+    std::thread ws_thread(webserver, fname, std::ref(data), host.second, url_path);
 
     std::string url = "http://" + host.first + ":" + std::to_string(host.second) + url_path;
 

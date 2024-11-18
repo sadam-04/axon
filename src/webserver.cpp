@@ -41,7 +41,7 @@ std::string getFileExt(std::string fname)
     return fname;
 }
 
-void handleClient(SOCKET clientSocket, std::string filename, std::string data, std::string url_path, std::string mimetype, std::string sug_cont_dispo) { //suggested content disposition
+void handleClient(SOCKET clientSocket, std::string filename, std::string &data, std::string url_path, std::string mimetype, std::string sug_cont_dispo) { //suggested content disposition
     // Buffer for receiving data
     char buffer[1024] = {0};
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
@@ -87,7 +87,7 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data, s
     closesocket(clientSocket);
 }
 
-int webserver(std::string filename, std::string data, unsigned int port, std::string url_path) {
+int webserver(std::string filename, std::string &data, unsigned int port, std::string url_path) {
     WSADATA wsaData;
     SOCKET serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
@@ -154,7 +154,7 @@ int webserver(std::string filename, std::string data, unsigned int port, std::st
         }
 
         // Handle the client request
-        responses.push_back(std::thread(handleClient, clientSocket, filename, data, url_path, mimetype, content_disposition));
+        responses.push_back(std::thread(handleClient, clientSocket, filename, std::ref(data), url_path, mimetype, content_disposition));
     }
 
     // Cleanup
