@@ -11,6 +11,7 @@
 #include "qr_to_bmp.hpp"
 #include "window.hpp"
 #include "gethost.hpp"
+#include "randompath.hpp"
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
@@ -62,9 +63,12 @@ int main(int argc, char* argv[]) {
 
     HOST host = getHost(ROOT_DIR + "host.txt");
 
-    std::thread ws_thread(webserver, fname, data, host.second);
 
-    std::string url = "http://" + host.first + ":" + std::to_string(host.second) + "/file";
+    std::string url_path = '/' + randomPath();
+    
+    std::thread ws_thread(webserver, fname, data, host.second, url_path);
+
+    std::string url = "http://" + host.first + ":" + std::to_string(host.second) + url_path;
 
     // Create a QR Code object
     qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(url.c_str(), qrcodegen::QrCode::Ecc::LOW);
