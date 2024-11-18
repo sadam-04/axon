@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "font.hpp"
 
 void centerSprite(sf::Sprite &spr, sf::RenderWindow &w)
 {
@@ -36,7 +35,7 @@ int showBMP(std::string bmpdata, std::string filename, std::string url) {
     }
 
     sf::Font font;
-    if (!font.loadFromMemory(GeistMono_SemiBold_ttf, GeistMono_SemiBold_ttf_size))
+    if (!font.loadFromFile("static/font/GeistMono-SemiBold.ttf"))
     {
         std::cerr << "Unable to load font\n";
         exit(0);
