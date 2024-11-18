@@ -28,6 +28,15 @@ std::string getParentDirectory(const std::string& fullPath) {
     return "";
 }
 
+std::string getExecutableDirectory() {
+    char buffer[MAX_PATH];
+    GetModuleFileNameA(nullptr, buffer, MAX_PATH);
+    std::string fullPath(buffer);
+    return fullPath.substr(0, fullPath.find_last_of("\\/"));
+}
+
+std::string ROOT_DIR;
+
 int main(int argc, char* argv[]) {
 
     std::string fname;
@@ -47,10 +56,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    ROOT_DIR = getExecutableDirectory();
+
     std::string data = loadFile(fname);
 
-    HOST host = getHost(getParentDirectory(argv[0]) + "host.txt");
-
+    HOST host = getHost(ROOT_DIR + "host.txt");
 
     std::thread ws_thread(webserver, fname, data, host.second);
 
