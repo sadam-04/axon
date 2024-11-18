@@ -5,3 +5,4 @@ host.txt
 .vscode
 src/SFML-2.6.2/
 /font
+vcpkg_installed/
