@@ -1,0 +1,8 @@
+{
+    "name": "axon",
+    "version": "1.0.0",
+    "builtin-baseline": "bf02a3800b06f17cdbd0c358632b07b295dda935",
+    "dependencies": [
+        "sfml"
+    ]
+}
