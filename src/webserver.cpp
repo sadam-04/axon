@@ -33,7 +33,15 @@ std::string parseRequestPath(char* cbuf)
     return path;
 }
 
-void handleClient(SOCKET clientSocket, std::string filename, std::string data, std::string url_path) {
+std::string getFileExt(std::string fname)
+{
+    while (fname.find('.') != std::string::npos)
+        fname.erase(0, 1);
+
+    return fname;
+}
+
+void handleClient(SOCKET clientSocket, std::string filename, std::string &data, std::string url_path, std::string mimetype, std::string sug_cont_dispo) { //suggested content disposition
     // Buffer for receiving data
     char buffer[1024] = {0};
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
@@ -51,25 +59,24 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data, s
         "<!DOCTYPE html><html><head><title>For, oh fore</title></head>"
         "<body><h1>nothing here</h1></body></html>";
 
-    std::string response_type = 
-        "text/html";
-
-    std::string dlname = 
-        "";
+    std::string cont_dispo = "inline";
 
     std::string reqPath = parseRequestPath(buffer);
+    
+    
     if (reqPath == std::string(url_path))
     {
-        response_type = "application/octet-stream";
+        //response_type = "application/octet-stream";
         response_body = data;
-        dlname = "Content-Disposition: attachment; filename=" + shortenPath(filename) + "\r\n";
+        cont_dispo = sug_cont_dispo;
     }
+        
 
     std::string httpResponse =
         "HTTP/1.1 200 OK\r\n"
-        "Content-Type: " + response_type + "\r\n"
+        "Content-Type: " + mimetype + "\r\n"
         "Content-Length: " + std::to_string(response_body.size()) + "\r\n"
-        + dlname
+        + "Content-Disposition: " + cont_dispo + (cont_dispo=="attachment" ? ("; filename="+shortenPath(filename)+"\r\n") : (""))
         + "Connection: close\r\n\r\n"
         + response_body;
 
@@ -80,12 +87,26 @@ void handleClient(SOCKET clientSocket, std::string filename, std::string data, s
     closesocket(clientSocket);
 }
 
-int webserver(std::string filename, std::string data, unsigned int port, std::string url_path) {
+int webserver(std::string filename, std::string &data, unsigned int port, std::string url_path) {
     WSADATA wsaData;
     SOCKET serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
     int clientAddrLen = sizeof(clientAddr);
 
+    std::string ext, content_disposition = "attachment", mimetype = "application/octet-stream";
+    ext = getFileExt(filename);
+
+    if (ext == "jpg" || ext == "jpeg")
+        mimetype = "image/jpeg";
+    else if (ext == "png")
+        mimetype = "image/png";
+    else if (ext == "pdf")
+        mimetype = "application/pdf";
+    else if (ext == "mp4")
+    {
+        mimetype = "video/mp4";
+        content_disposition = "inline";
+    }
     // Initialize Winsock
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cerr << "WSAStartup failed with error: " << WSAGetLastError() << std::endl;
@@ -133,7 +154,7 @@ int webserver(std::string filename, std::string data, unsigned int port, std::st
         }
 
         // Handle the client request
-        responses.push_back(std::thread(handleClient, clientSocket, filename, data, url_path));
+        responses.push_back(std::thread(handleClient, clientSocket, filename, std::ref(data), url_path, mimetype, content_disposition));
     }
 
     // Cleanup
