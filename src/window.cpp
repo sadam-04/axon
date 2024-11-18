@@ -23,6 +23,8 @@ void centerSprite(sf::Text &spr, sf::RenderWindow &w)
     spr.setPosition(centerX, centerY);
 }
 
+extern std::string ROOT_DIR;
+
 int showBMP(std::string bmpdata, std::string filename, std::string url) {
     // Create a window
     sf::RenderWindow window(sf::VideoMode(500, 500), "Axon");
@@ -35,7 +37,7 @@ int showBMP(std::string bmpdata, std::string filename, std::string url) {
     }
 
     sf::Font font;
-    if (!font.loadFromFile("static/font/GeistMono-SemiBold.ttf"))
+    if (!font.loadFromFile(ROOT_DIR + "/static/font/GeistMono-SemiBold.ttf"))
     {
         std::cerr << "Unable to load font\n";
         exit(0);
