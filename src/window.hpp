@@ -1,1 +1,1 @@
-int showBMP(std::string bmpfile, std::string filename, std::string url);
+int createWindow(std::string bmpfile, std::string filename, std::string url);

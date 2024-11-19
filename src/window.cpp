@@ -25,7 +25,7 @@ void centerSprite(sf::Text &spr, sf::RenderWindow &w)
 
 extern std::string ROOT_DIR;
 
-int showBMP(std::string bmpdata, std::string filename, std::string url) {
+int createWindow(std::string bmpdata, std::string filename, std::string url) {
     // Create a window
     sf::RenderWindow window(sf::VideoMode(500, 500), "Axon");
 
