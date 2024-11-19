@@ -1,7 +1,7 @@
 #include <string>
 #include <random>
 
-std::string randomPath() {
+std::string generatePath() {
     // Define the characters to choose from (letters and digits)
     const std::string charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     std::string randomString;
