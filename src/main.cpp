@@ -10,8 +10,8 @@
 #include "dataloader.hpp"
 #include "qr_to_bmp.hpp"
 #include "window.hpp"
-#include "gethost.hpp"
 #include "randompath.hpp"
+#include "settings/settings.hpp"
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
@@ -37,17 +37,20 @@ std::string getExecutableDirectory() {
 }
 
 std::string ROOT_DIR;
+AXONSETTINGSCONF SETTINGS;
 
 int main(int argc, char* argv[]) {
+
+    ROOT_DIR = getExecutableDirectory(); //DOES NOT include trailing slash/
+    SETTINGS = loadSettings(ROOT_DIR + "\\server.properties");
 
     std::string fname;
 
     if (argc == 2)
-    {
         fname = argv[1];
-    }
     else
     {
+        std::cout << "Enter target filepath:";
         std::cin >> fname;
 
         if (fname.empty())
@@ -57,27 +60,22 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    ROOT_DIR = getExecutableDirectory();
-
+    // Load target data from file
     std::string data = loadFile(fname);
 
-    HOST host = getHost(ROOT_DIR + "host.txt");
-
-
-    std::string url_path = '/' + randomPath();
+    // Build url
+    std::string url_path = '/' + generatePath();
+    std::string url = "http://" + SETTINGS.host + ":" + std::to_string(SETTINGS.port) + url_path;
     
-    std::thread ws_thread(webserver, fname, std::ref(data), host.second, url_path);
+    // Start webserver
+    std::thread ws_thread(webserver, fname, std::ref(data), SETTINGS.port, url_path);
 
-    std::string url = "http://" + host.first + ":" + std::to_string(host.second) + url_path;
-
-    // Create a QR Code object
+    // Create QR
     qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(url.c_str(), qrcodegen::QrCode::Ecc::LOW);
+    std::string qr_bmp = makebmp(qr);
 
-    std::string bmpdata = makebmp(qr);
-
-    std::thread sfml_thread(showBMP, bmpdata, fname, url);
-
-    sfml_thread.join();
+    // Create SFML window on main thread
+    createWindow(qr_bmp, fname, url);
 
     return 0;
 }

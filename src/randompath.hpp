@@ -1,1 +1,1 @@
-std::string randomPath();
+std::string generatePath();
