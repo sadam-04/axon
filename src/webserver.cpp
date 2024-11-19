@@ -113,13 +113,6 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
         return 1;
     }
 
-
-
-
-
-
-
-
     //build http_200_response
     std::string ext, content_disposition = "attachment", mimetype = "application/octet-stream";
     ext = getFileExt(getFilename(filepath));
@@ -160,11 +153,6 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
         + "Content-Disposition: inline\r\n"
         + "Connection: close\r\n\r\n"
         + body_404;
-
-
-
-
-
 
     // Main server loop
     std::vector<std::thread> responses;
