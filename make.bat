@@ -1,6 +1,6 @@
 @ECHO OFF
 setlocal
-set PROJECT_ROOT=C:\repos\Axon
+set PROJECT_ROOT=%~dp0
 set VCPKG_ROOT=%PROJECT_ROOT%\vcpkg_installed
 set TRIPLET=x64-windows
 mkdir out
