@@ -4,7 +4,7 @@
 #include <sstream>
 #include <thread>
 #include <vector>
-#include "common.hpp"
+#include "common/common.hpp"
 
 #pragma comment(lib, "Ws2_32.lib")
 

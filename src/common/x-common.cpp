@@ -1,7 +1,84 @@
 #include <iostream>
-#include "nayuki-qr/qrcodegen.hpp"
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <random>
+#include "../nayuki-qr/qrcodegen.hpp"
 
-#define BMP_DATA_START (0x0)
+std::string getFilename(std::string path)
+{
+    while (path.find('/') != std::string::npos)
+        path.erase(0, 1);
+
+    while (path.find('\\') != std::string::npos)
+        path.erase(0, 1);
+
+    return path;
+}
+
+std::string parseRequestPath(char* cbuf)
+{
+    std::string buf = cbuf;
+
+    std::stringstream stream(buf);
+
+    std::string token;
+    for (std::string token; token != "GET"; stream >> token) {};
+
+    std::string path;
+    stream >> path;
+
+    return path;
+}
+
+std::string getFileExt(std::string fname)
+{
+    while (fname.find('.') != std::string::npos)
+        fname.erase(0, 1);
+
+    return fname;
+}
+
+std::string randAN(unsigned int len) {
+    // Define the characters to choose from (letters and digits)
+    const std::string charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    std::string randomString;
+
+    // Create a random device and engine
+    std::random_device rd;
+    std::mt19937 gen(rd());  // Mersenne Twister random number generator
+    std::uniform_int_distribution<> dis(0, charset.size() - 1);  // Uniform distribution
+
+    // Generate a random string of the specified length
+    for (int i = 0; i < len; ++i) {
+        randomString += charset[dis(gen)];  // Append a random character
+    }
+
+    return randomString;
+}
+
+std::string getParentDirectory(const std::string& fullPath) {
+    size_t lastSlashPos = fullPath.find_last_of("\\/");
+    if (lastSlashPos != std::string::npos) {
+        return fullPath.substr(0, lastSlashPos + 1); // Include trailing slash
+    }
+    return "";
+}
+
+std::string loadFile(std::string filename)
+{
+    std::ifstream file(filename, std::ios::binary);
+    if (!file.is_open())
+    {
+        std::cerr << "Unable to open file " + filename + "\n";
+        exit(1);
+    }
+
+    std::ostringstream sstr;
+    sstr << file.rdbuf();
+
+    return sstr.str();
+}
 
 std::string pack32(int32_t value) {
     std::string binaryString(4, '\0'); // Initialize a 4-byte string filled with null characters

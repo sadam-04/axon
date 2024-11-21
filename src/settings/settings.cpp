@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "settings.hpp"
-#include "../gethost.hpp"
+#include "../common/common.hpp"
 
 std::string defaults = 
     "host=auto\n"

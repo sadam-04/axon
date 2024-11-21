@@ -5,10 +5,8 @@
 #include <sstream>
 #include "nayuki-qr/qrcodegen.hpp"
 #include "webserver.hpp"
-#include "dataloader.hpp"
-#include "qr_to_bmp.hpp"
 #include "window.hpp"
-#include "common.hpp"
+#include "common/common.hpp"
 #include "settings/settings.hpp"
 
 char QR_1_STR[2] = {(char)219, (char)219};
