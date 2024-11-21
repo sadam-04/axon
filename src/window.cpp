@@ -1,5 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "icon/icon.hpp"
+
+#pragma comment(lib, "sfml-graphics.lib")
+#pragma comment(lib, "sfml-window.lib")
+#pragma comment(lib, "sfml-system.lib")
 
 void centerSprite(sf::Sprite &spr, sf::RenderWindow &w)
 {
@@ -27,7 +32,10 @@ extern std::string ROOT_DIR;
 
 int createWindow(std::string bmpdata, std::string filename, std::string url) {
     // Create a window
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Axon");
+    sf::RenderWindow window(sf::VideoMode(500, 500), "Axon", sf::Style::Close);
+
+    window.setFramerateLimit(30);
+    window.setIcon(ICON_WIDTH, ICON_HEIGHT, ICON_RGBA);
 
     // Load the BMP image into a texture
     sf::Texture texture;
