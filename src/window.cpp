@@ -2,6 +2,10 @@
 #include <iostream>
 #include "icon/icon.hpp"
 
+#pragma comment(lib, "sfml-graphics.lib")
+#pragma comment(lib, "sfml-window.lib")
+#pragma comment(lib, "sfml-system.lib")
+
 void centerSprite(sf::Sprite &spr, sf::RenderWindow &w)
 {
     sf::Vector2u wSize = w.getSize();
