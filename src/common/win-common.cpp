@@ -1,20 +1,12 @@
 #include <string>
-#include <ws2tcpip.h>
-#include <windows.h>
-#include <iphlpapi.h>
-#include <winsock2.h>
 #include <iostream>
 #include <fstream>
 
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
-
-std::string getExecutableDirectory() {
-    char buffer[1024];
-    GetModuleFileNameA(nullptr, buffer, 1024);
-    std::string fullPath(buffer);
-    return fullPath.substr(0, fullPath.find_last_of("\\/"));
-}
 
 std::string GetLANIPAddress() {
     ULONG bufferSize = 0;

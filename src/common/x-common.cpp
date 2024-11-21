@@ -5,6 +5,27 @@
 #include <random>
 #include "../nayuki-qr/qrcodegen.hpp"
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
+#ifdef __APPLE__
+    #include <mach-o/dyld.h>
+#endif
+
+std::string getExecutableDirectory() {
+    #ifdef _WIN32
+        char buffer[MAX_PATH];
+        GetModuleFileNameA(nullptr, buffer, MAX_PATH);
+    #endif
+    #ifdef __APPLE__
+        char buffer[PATH_MAX];
+        _NSGetExecutablePath(buffer, &size);
+    #endif
+    std::string fullPath(buffer);
+    return fullPath.substr(0, fullPath.find_last_of("\\/"));
+}
+
 std::string getFilename(std::string path)
 {
     while (path.find('/') != std::string::npos)
