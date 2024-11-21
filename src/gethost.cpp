@@ -6,8 +6,8 @@
 #include <fstream>
 #include "gethost.hpp"
 
-#pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "iphlpapi.lib")
+//#pragma comment(lib, "ws2_32.lib")
+//#pragma comment(lib, "iphlpapi.lib")
 
 std::string GetLANIPAddress() {
     ULONG bufferSize = 0;
