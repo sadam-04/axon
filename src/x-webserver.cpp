@@ -7,6 +7,7 @@
 #include "settings/settings.hpp"
 
 extern AXONSETTINGSCONF SETTINGS;
+extern std::string ROOT_DIR;
 
 void save_file(std::string filename, std::string data, unsigned __int64 size)
 {
@@ -18,8 +19,10 @@ void save_file(std::string filename, std::string data, unsigned __int64 size)
 
     //std::cout << "SAVE TO: " << SETTINGS.save_to + filename << '\n';
 
-    std::filesystem::create_directory(SETTINGS.save_to);
-    std::ofstream ofs(SETTINGS.save_to + filename, std::ios::binary);
+    std::cout << ROOT_DIR + '/' + SETTINGS.save_to + filename << '\n';
+
+    std::filesystem::create_directory(ROOT_DIR + '/' + SETTINGS.save_to);
+    std::ofstream ofs(ROOT_DIR + '/' + SETTINGS.save_to + filename, std::ios::binary);
     if (ofs) {
         ofs.write(data.c_str(), size);
         ofs.close();
@@ -130,7 +133,7 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
 "<body>"
 "    <div class=\"main-content\">"
 "        <form method=\"post\" enctype=\"multipart/form-data\" action=\"" + url_path_recv + "\">"
-"            <span class=\"section-title\">Upload</span>"
+"            <span class=\"section-title\">Send to " + SETTINGS.host + "</span>"
 "            <hr style=\"width:100%;\">"
 "            <label for=\"file-input\" class=\"file-input-label\">"
 "                Browse"

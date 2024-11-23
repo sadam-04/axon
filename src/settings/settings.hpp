@@ -2,7 +2,8 @@ struct AXONSETTINGSCONF
 {
     std::string host;
     unsigned int port;
-    unsigned int bgcolor;
+    unsigned int sendbgcolor;
+    unsigned int recvbgcolor;
     std::string save_to;
 };
 

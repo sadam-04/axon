@@ -48,6 +48,8 @@ int main(int argc, char* argv[]) {
 
     // Create SFML window on main thread
     createWindow(qr_bmp_send, qr_bmp_recv, getFilename(fname), url_send, url_recv);
+    //std::string paws;
+    //std::cin >> paws;
 
     return 0;
 }

@@ -46,14 +46,9 @@ extern std::string ROOT_DIR;
 
 int createWindow(std::string qr_bmp_send, std::string qr_bmp_recv, std::string filename, std::string url_send, std::string url_recv) {
 
-    //////////
-    std::cout << "url_recv: " << url_recv << '\n';
-    //////////
-
-    // Create a window
     sf::RenderWindow window(sf::VideoMode(330, 360), "Axon", sf::Style::Close);
-
-    window.setFramerateLimit(30);
+    //window.setFramerateLimit(30);
+    window.setVerticalSyncEnabled(true);
     window.setIcon(ICON_WIDTH, ICON_HEIGHT, ICON_RGBA);
 
     // Load the BMP image into a texture
@@ -110,6 +105,8 @@ int createWindow(std::string qr_bmp_send, std::string qr_bmp_recv, std::string f
 
     sf::Sprite *current_qr = &qr_spr_send;
 
+    unsigned int *currentBGColor = &SETTINGS.sendbgcolor;
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -121,11 +118,12 @@ int createWindow(std::string qr_bmp_send, std::string qr_bmp_recv, std::string f
                     if (current_qr == &qr_spr_send) current_qr = &qr_spr_recv; else current_qr = &qr_spr_send;
                     if (fn_text.getString() == filename) fn_text.setString("Receive"); else fn_text.setString(filename);
                     if (url_text.getString() == url_send) url_text.setString(url_recv); else url_text.setString(url_send);
+                    if (currentBGColor == &SETTINGS.sendbgcolor) currentBGColor = &SETTINGS.recvbgcolor; else currentBGColor = &SETTINGS.sendbgcolor;
                 }
         }
 
         // Clear, draw, and display
-        window.clear(sf::Color(SETTINGS.bgcolor));
+        window.clear(sf::Color(*currentBGColor));
         window.draw(fn_text);
         window.draw(url_text);
         //window.draw(qrBG);

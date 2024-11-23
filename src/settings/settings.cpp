@@ -7,7 +7,8 @@
 std::string defaults = 
     "host=auto\n"
     "port=8082\n"
-    "bgcolor=FF353C00\n"
+    "sendbgcolor=FF353C00\n"
+    "recvbgcolor=3C35FF00\n"
     "save_to=saved/\n"
 ;
 
@@ -56,8 +57,10 @@ AXONSETTINGSCONF loadSettings(std::string fname)
                 settings.port = std::stoi(val);
             if (field == "host")
                 settings.host = val;
-            if (field == "bgcolor")
-                settings.bgcolor = std::stoul(val, nullptr, 16);
+            if (field == "sendbgcolor")
+                settings.sendbgcolor = std::stoul(val, nullptr, 16);
+            if (field == "recvbgcolor")
+                settings.recvbgcolor = std::stoul(val, nullptr, 16);
             if (field == "save_to")
                 settings.save_to = val;
         }
