@@ -7,7 +7,7 @@ mkdir out
 if "%1"=="debug" (
     echo Compiling debug version...
     mkdir "out\debug\"
-    cl /EHsc src\*.cpp src\common\*.cpp src\settings\*.cpp src\nayuki-qr\qrcodegen.cpp src\icon\icon.res /Fe:out\debug\Axon.exe /Fo:out\debug\ /I "%VCPKG_ROOT%\%TRIPLET%\include" /link /LIBPATH:"%VCPKG_ROOT%\%TRIPLET%\lib"
+    cl /EHsc /std:c++17 src\*.cpp src\common\*.cpp src\settings\*.cpp src\nayuki-qr\qrcodegen.cpp src\icon\icon.res /Fe:out\debug\Axon.exe /Fo:out\debug\ /I "%VCPKG_ROOT%\%TRIPLET%\include" /link /LIBPATH:"%VCPKG_ROOT%\%TRIPLET%\lib"
     xcopy src\static out\debug\static /E /I /H /Y
     xcopy %VCPKG_ROOT%\%TRIPLET%\bin\* out\debug\* /Y
 ) else (

@@ -21,37 +21,33 @@ int main(int argc, char* argv[]) {
     SETTINGS = loadSettings(ROOT_DIR + "\\server.properties");
 
     std::string fname;
-
+    std::string data;
     if (argc == 2)
         fname = argv[1];
-    else
-    {
-        std::cout << "Enter target filepath:";
-        std::cin >> fname;
-
-        if (fname.empty())
-        {
-            std::cerr << "Invalid filename\n";
-            exit(1);
-        }
-    }
-
-    // Load target data from file
-    std::string data = loadFile(fname);
+        // Load target data from file
+        data = loadFile(fname);
 
     // Build url
-    std::string url_path = '/' + randAN(5);
-    std::string url = "http://" + SETTINGS.host + ":" + std::to_string(SETTINGS.port) + url_path;
-    
+    std::string url_path_send = '/' + randAN(5);
+    std::string url_path_recv = '/' + randAN(5);
+
+    while (url_path_recv == url_path_send)
+        url_path_recv = '/' + randAN(5);
+
+    std::string url_send = "http://" + SETTINGS.host + ":" + std::to_string(SETTINGS.port) + url_path_send;
+    std::string url_recv = "http://" + SETTINGS.host + ":" + std::to_string(SETTINGS.port) + url_path_recv;
+
     // Start webserver
-    std::thread ws_thread(webserver, fname, std::ref(data), SETTINGS.port, url_path);
+    std::thread ws_thread(webserver, fname, std::ref(data), SETTINGS.port, url_path_send, url_path_recv);
 
     // Create QR
-    qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(url.c_str(), qrcodegen::QrCode::Ecc::LOW);
-    std::string qr_bmp = makebmp(qr);
+    qrcodegen::QrCode qr_send = qrcodegen::QrCode::encodeText(url_send.c_str(), qrcodegen::QrCode::Ecc::LOW);
+    qrcodegen::QrCode qr_recv = qrcodegen::QrCode::encodeText(url_recv.c_str(), qrcodegen::QrCode::Ecc::LOW);
+    std::string qr_bmp_send = makebmp(qr_send);
+    std::string qr_bmp_recv = makebmp(qr_recv);
 
     // Create SFML window on main thread
-    createWindow(qr_bmp, getFilename(fname), url);
+    createWindow(qr_bmp_send, qr_bmp_recv, getFilename(fname), url_send, url_recv);
 
     return 0;
 }

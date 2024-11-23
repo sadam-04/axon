@@ -44,7 +44,12 @@ void centerSprite(sf::RectangleShape &spr, sf::RenderWindow &w)
 
 extern std::string ROOT_DIR;
 
-int createWindow(std::string bmpdata, std::string filename, std::string url) {
+int createWindow(std::string qr_bmp_send, std::string qr_bmp_recv, std::string filename, std::string url_send, std::string url_recv) {
+
+    //////////
+    std::cout << "url_recv: " << url_recv << '\n';
+    //////////
+
     // Create a window
     sf::RenderWindow window(sf::VideoMode(330, 360), "Axon", sf::Style::Close);
 
@@ -53,7 +58,7 @@ int createWindow(std::string bmpdata, std::string filename, std::string url) {
 
     // Load the BMP image into a texture
     sf::Texture texture;
-    if (!texture.loadFromMemory(bmpdata.c_str(), bmpdata.size())) {
+    if (!texture.loadFromMemory(qr_bmp_send.c_str(), qr_bmp_send.size())) {
         std::cerr << "Error: Could not load image file!" << std::endl;
         return 1;
     }
@@ -70,7 +75,7 @@ int createWindow(std::string bmpdata, std::string filename, std::string url) {
     url_text.setFont(font);
 
     fn_text.setString(filename);
-    url_text.setString(url);
+    url_text.setString(url_send);
 
     fn_text.setCharacterSize(18);
     url_text.setCharacterSize(14);
