@@ -1,98 +1,98 @@
-"<!DOCTYPE html>"
-"<html>"
-"<head>"
-"    <title>Axon upload</title>"
-"    <style>"
-"        "
-"        body {"
-"            font-family: \"Geist Mono\", serif;"
-"        }"
-""
-"        input {"
-"            font-family: \"Geist Mono\", serif;"
-"        }"
-""
-"        .main-content {"
-"            justify-content: center;"
-"            justify-items: center;"
-"            text-align: center;"
-"            width: 80%;"
-"            margin: auto;"
-"            display: block;"
-"        }"
-""
-"        .section-title {"
-"            display: block; /* Make the span behave like a block element */"
-"            text-align: center; /* Center-align the text */"
-"            font-size: 34px;"
-"            margin-bottom: 10px; /* Optional: Adds spacing between the title and the form */"
-"        }"
-""
-"        form {"
-"            display: flex;"
-"            flex-direction: column; /* Stack elements vertically */"
-"            align-items: center;    /* Center elements horizontally */"
-"            background-color: #f9f9f9; /* Light gray background */"
-"            padding: 20px;          /* Add some space inside the form */"
-"            border: 1px solid #ccc; /* Add a border */"
-"            width: 200px;           /* Set form width */"
-"            margin: 20px auto;      /* Center the form on the page */"
-"            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */"
-"        }"
-""
-"        .file-input-label {"
-"            padding: 10px 0px;"
-"            margin: 5px;"
-"            background-color: #FF353C; /* Blue background */"
-"            color: #fff;              /* White text */"
-"            border-radius: 5px;"
-"            width: 85%;"
-"            transition: background-color 0.3s ease; /* Smooth hover effect */"
-"            text-align: center;"
-"        }"
-""
-"        .file-input-label:hover {"
-"            background-color: #DD2a2a; /* Darker blue on hover */"
-"        }"
-""
-"        input[type=\"file\"] {"
-"            display: none;"
-"        }"
-""
-"        input[type=\"submit\"] {"
-"            background-color: #FF353C; /* Blue button background */"
-"            color: #fff;              /* White text */"
-"            border: none;             /* Remove border */"
-"            width: 85%;"
-"            margin: 5px;"
-"            padding: 10px 0px;       /* Add padding */"
-"            font-size: 1em;           /* Font size */"
-"            cursor: pointer;          /* Pointer cursor on hover */"
-"            border-radius: 5px;       /* Rounded corners */"
-"            transition: background-color 0.3s ease; /* Smooth hover effect */"
-"        }"
-""
-"        input[type=\"submit\"]:hover {"
-"            background-color: #DD2a2a; /* Darker blue on hover */"
-"        }"
-""
-"    </style>"
-""
-"    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">"
-"    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>"
-"    <link href=\"https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap\" rel=\"stylesheet\">"
-"</head>"
-"<body>"
-"    <div class=\"main-content\">"
-"        <form method=\"post\" enctype=\"multipart/form-data\" action=\"/\">"
-"            <span class=\"section-title\">Upload</span>"
-"            <hr style=\"width:100%;\">"
-"            <label for=\"file-input\" class=\"file-input-label\">"
-"                Browse"
-"            </label>"
-"            <input id=\"file-input\" name=\"file\" type=\"file\">"
-"            <input type=\"submit\">"
-"        </form>"
-"    </div>"
-"</body>"
-"</html>"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Axon upload</title>
+    <style>
+        
+        body {
+            font-family: "Geist Mono", serif;
+        }
+
+        input {
+            font-family: "Geist Mono", serif;
+        }
+
+        .main-content {
+            justify-content: center;
+            justify-items: center;
+            text-align: center;
+            width: 80%;
+            margin: auto;
+            display: block;
+        }
+
+        .section-title {
+            display: block; /* Make the span behave like a block element */
+            text-align: center; /* Center-align the text */
+            font-size: 34px;
+            margin-bottom: 10px; /* Optional: Adds spacing between the title and the form */
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;    /* Center elements horizontally */
+            background-color: #f9f9f9; /* Light gray background */
+            padding: 20px;          /* Add some space inside the form */
+            border: 1px solid #ccc; /* Add a border */
+            width: 200px;           /* Set form width */
+            margin: 20px auto;      /* Center the form on the page */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        .file-input-label {
+            padding: 10px 0px;
+            margin: 5px;
+            background-color: #FF353C; /* Blue background */
+            color: #fff;              /* White text */
+            border-radius: 5px;
+            width: 85%;
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+            text-align: center;
+        }
+
+        .file-input-label:hover {
+            background-color: #DD2a2a; /* Darker blue on hover */
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        input[type="submit"] {
+            background-color: #FF353C; /* Blue button background */
+            color: #fff;              /* White text */
+            border: none;             /* Remove border */
+            width: 85%;
+            margin: 5px;
+            padding: 10px 0px;       /* Add padding */
+            font-size: 1em;           /* Font size */
+            cursor: pointer;          /* Pointer cursor on hover */
+            border-radius: 5px;       /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #DD2a2a; /* Darker blue on hover */
+        }
+
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-content">
+        <form method="post" enctype="multipart/form-data" action="/">
+            <span class="section-title">Upload</span>
+            <hr style="width:100%;">
+            <label for="file-input" class="file-input-label">
+                Browse
+            </label>
+            <input id="file-input" name="file" type="file">
+            <input type="submit">
+        </form>
+    </div>
+</body>
+</html>
