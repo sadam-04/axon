@@ -1,10 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "icon/icon.hpp"
+#include "settings/settings.hpp"
 
 #pragma comment(lib, "sfml-graphics.lib")
 #pragma comment(lib, "sfml-window.lib")
 #pragma comment(lib, "sfml-system.lib")
+
+extern AXONSETTINGSCONF SETTINGS;
 
 void centerSprite(sf::Sprite &spr, sf::RenderWindow &w)
 {
@@ -28,11 +31,22 @@ void centerSprite(sf::Text &spr, sf::RenderWindow &w)
     spr.setPosition(centerX, centerY);
 }
 
+void centerSprite(sf::RectangleShape &spr, sf::RenderWindow &w)
+{
+    sf::Vector2u wSize = w.getSize();
+    sf::FloatRect sprBounds = spr.getGlobalBounds();
+
+    float centerX = (wSize.x - sprBounds.width) / 2;
+    float centerY = (wSize.y - sprBounds.height) / 2;
+
+    spr.setPosition(centerX, centerY);
+}
+
 extern std::string ROOT_DIR;
 
 int createWindow(std::string bmpdata, std::string filename, std::string url) {
     // Create a window
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Axon", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(330, 360), "Axon", sf::Style::Close);
 
     window.setFramerateLimit(30);
     window.setIcon(ICON_WIDTH, ICON_HEIGHT, ICON_RGBA);
@@ -58,8 +72,8 @@ int createWindow(std::string bmpdata, std::string filename, std::string url) {
     fn_text.setString(filename);
     url_text.setString(url);
 
-    fn_text.setCharacterSize(20);
-    url_text.setCharacterSize(20);
+    fn_text.setCharacterSize(18);
+    url_text.setCharacterSize(14);
 
     fn_text.setFillColor(sf::Color::White);
     url_text.setFillColor(sf::Color::White);
@@ -69,12 +83,18 @@ int createWindow(std::string bmpdata, std::string filename, std::string url) {
     sf::Sprite qrSpr;
     qrSpr.setTexture(texture);
 
+    //sf::RectangleShape qrBG(sf::Vector2f(325.f, 300.f));
+
     qrSpr.setScale(12.f, 12.f);
+    //qrBG.setFillColor(sf::Color::Black);
 
     centerSprite(qrSpr, window);
     centerSprite(url_text, window);
+    centerSprite(fn_text, window);
+    //centerSprite(qrBG, window);
 
-    url_text.setPosition(url_text.getPosition().x, qrSpr.getGlobalBounds().top + qrSpr.getGlobalBounds().height + 10.f);
+    url_text.setPosition(url_text.getPosition().x, qrSpr.getGlobalBounds().top + qrSpr.getGlobalBounds().height + 6.f);
+    fn_text.setPosition(fn_text.getPosition().x, qrSpr.getGlobalBounds().top - fn_text.getLocalBounds().height - 10.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -84,9 +104,10 @@ int createWindow(std::string bmpdata, std::string filename, std::string url) {
         }
 
         // Clear, draw, and display
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color(SETTINGS.bgcolor));
         window.draw(fn_text);
         window.draw(url_text);
+        //window.draw(qrBG);
         window.draw(qrSpr);
         window.display();
     }

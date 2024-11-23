@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     std::string qr_bmp = makebmp(qr);
 
     // Create SFML window on main thread
-    createWindow(qr_bmp, fname, url);
+    createWindow(qr_bmp, getFilename(fname), url);
 
     return 0;
 }

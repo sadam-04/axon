@@ -7,6 +7,7 @@
 std::string defaults = 
     "host=auto\n"
     "port=8082\n"
+    "bgcolor=FF353C00\n"
 ;
 
 void createDefaultSettings(std::string fname)
@@ -54,6 +55,8 @@ AXONSETTINGSCONF loadSettings(std::string fname)
                 settings.port = std::stoi(val);
             if (field == "host")
                 settings.host = val;
+            if (field == "bgcolor")
+                settings.bgcolor = std::stoul(val, nullptr, 16);
         }
     } while (std::getline(sett_file, line));
 
