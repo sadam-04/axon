@@ -30,9 +30,9 @@ void centerObj(sf::Transformable &obj, sf::FloatRect &bounds, sf::RenderWindow &
 extern std::string ROOT_DIR;
 
 int create_window(std::string qr_bmp, std::string url, std::queue<FileRecvCandidate> &file_q, std::mutex &file_q_mutex, std::string filename = "") {
-    const unsigned int W_WIDTH_SEND = 330;
-    const unsigned int W_WIDTH_RECV = 660;
-    const unsigned int W_HEIGHT = 360;
+    const unsigned int W_WIDTH_SEND = 375;
+    const unsigned int W_WIDTH_RECV = 675;
+    const unsigned int W_HEIGHT = 380;
 
     const unsigned int QR_MARGIN = 15;
 
@@ -81,7 +81,10 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRecvCandid
     // QR Sprite
     sf::Sprite qr_spr;
     qr_spr.setTexture(qr_tex);
-    qr_spr.setScale(12.f, 12.f);
+    
+    sf::FloatRect qrbounds = qr_spr.getGlobalBounds();
+    float qrScalar = 300.f/qrbounds.height;
+    qr_spr.setScale(qrScalar, qrScalar);
 
     // Center elements
     centerObj(qr_spr, qr_spr.getGlobalBounds(), window, VERT | (HORIZ & MODE_SEND));
