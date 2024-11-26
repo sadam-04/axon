@@ -1,3 +1,7 @@
+#ifndef _COMMON_HPP_
+#define _COMMON_HPP_
+
+#include <queue>
 #include "../nayuki-qr/qrcodegen.hpp"
 
 std::string getFilename(std::string path);
@@ -13,3 +17,14 @@ std::string loadFile(std::string filename);
 std::string GetLANIPAddress();
 
 std::string makebmp(qrcodegen::QrCode qr);
+
+struct FileRecvCandidate {
+    std::string filename;
+    std::string data;
+    std::string sender;
+    bool approved;
+};
+
+int pop_filerc(std::queue<FileRecvCandidate> &q);
+
+#endif
