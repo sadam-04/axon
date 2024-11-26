@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
-#include <filesystem>
+#include <queue>
+#include <mutex>
 #include "cpp-httplib/httplib.h"
 #include "common/common.hpp"
 #include "settings/settings.hpp"
@@ -9,30 +10,7 @@
 extern AXONSETTINGSCONF SETTINGS;
 extern std::string ROOT_DIR;
 
-void save_file(std::string filename, std::string data, unsigned __int64 size)
-{
-    char allow;
-    std::cout << "Recieve " << filename << "? (y/n)\n";
-    std::cin >> allow;
-    if (allow != 'y')
-        return;
-
-    //std::cout << "SAVE TO: " << SETTINGS.save_to + filename << '\n';
-
-    std::cout << ROOT_DIR + '/' + SETTINGS.save_to + filename << '\n';
-
-    std::filesystem::create_directory(ROOT_DIR + '/' + SETTINGS.save_to);
-    std::ofstream ofs(ROOT_DIR + '/' + SETTINGS.save_to + filename, std::ios::binary);
-    if (ofs) {
-        ofs.write(data.c_str(), size);
-        ofs.close();
-        std::cout << "File saved: " << filename << std::endl;
-    } else {
-        std::cerr << "Failed to save file: " << filename << std::endl;
-    }
-}
-
-int webserver(std::string filepath, std::string &data, unsigned int port, std::string url_path_send, std::string url_path_recv)
+int webserver(std::string filepath, std::string &data, unsigned int port, std::string url_path_send, std::string url_path_recv, std::queue<FileRecvCandidate> &file_q, std::mutex& file_q_mutex)
 {
     httplib::Server svr;
 
@@ -46,6 +24,7 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
 "<head>"
 "    <title>Axon upload</title>"
 "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+"    <link rel=\"icon\" type=\"image/png\" href=\"data:image/png;base64,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\" />"
 "    <style>"
 "        "
 "        body {"
@@ -174,7 +153,7 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
         res.set_content(body_upload, "text/html");
     });
 
-    svr.Post(url_path_recv, [url_path_recv](const auto& req, auto& res){
+    svr.Post(url_path_recv, [url_path_recv, &file_q, &file_q_mutex](const httplib::Request& req, httplib::Response& res){
         for (const auto &file : req.files) {
             const auto &name = file.first;                 // Form field name
             const auto &file_info = file.second;          // MultipartFormData object
@@ -182,8 +161,19 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
             const auto &content_type = file_info.content_type; // MIME type
             const auto &content = file_info.content;      // File content as string
 
-            std::thread saveThread(save_file, filename, content, content.size());
-            saveThread.detach();
+            if (
+                filename.find("\\") != std::string::npos &&
+                filename.find("/")  != std::string::npos
+            )
+            {
+                std::cerr << "Suspicious filename (" << filename << "). Exiting.\n";
+                exit(0);
+            }
+
+            // std::thread saveThread(save_file, filename, content, req.remote_addr);
+            // saveThread.detach();
+            std::lock_guard<std::mutex> lock(file_q_mutex);
+            file_q.push({filename, content, req.remote_addr, false});
 
             res.status = 301;
             res.set_header("Location", url_path_recv);

@@ -3,7 +3,14 @@
 #include <fstream>
 #include <sstream>
 #include <random>
+#include <filesystem>
+#include <queue>
+#include "../common/common.hpp"
+#include "../settings/settings.hpp"
 #include "../nayuki-qr/qrcodegen.hpp"
+
+extern AXONSETTINGSCONF SETTINGS;
+extern std::string ROOT_DIR;
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -302,4 +309,21 @@ std::string makebmp(qrcodegen::QrCode qr)
     }
 
     return bmp;
+}
+
+int pop_filerc(std::queue<FileRecvCandidate> &q)
+{
+    FileRecvCandidate filerc = q.front();
+    q.pop();
+
+    std::filesystem::create_directory(ROOT_DIR + '/' + SETTINGS.save_to);
+    std::ofstream file(ROOT_DIR + '/' + SETTINGS.save_to + filerc.filename, std::ios::binary);
+    if (file) {
+        file.write(filerc.data.c_str(), filerc.data.size());
+        file.close();
+        return 0;
+    } else {
+        std::cerr << "Failed to save file " << filerc.filename << "(" << ROOT_DIR + '/' + SETTINGS.save_to + filerc.filename << ")\n";
+        return 1;
+    }
 }
