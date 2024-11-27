@@ -1,24 +1,21 @@
 # Axon
-Quick and lightweight file transfer tool.
+Axon is a lightweight and portable file transfer tool focused on making transfers between a PC and phone as easy as possible.
 
-# Setup
-Install SFML 2.6.2 to src/SFML-2.6.2</br>
-Directory structure should look like this:</br>
-src/</br>
-&emsp;SFML-2.6.2/</br>
-&emsp;&emsp;bin/</br>
-&emsp;&emsp;doc/</br>
-&emsp;&emsp;examples/</br>
-&emsp;&emsp;include/</br>
-&emsp;&emsp;lib/</br>
-&emsp;&emsp;...</br>
-Then, copy the following from SFML-2.6.2/bin to the executable directory:</br>
- - sfml-graphics-2.dll
- - sfml-system-2.dll
- - sfml-window-2.dll
+## Setup
+- Use ````vcpkg-setup.bat````(windows) or ````vcpkg.sh````(macOS) to set up vcpkg. Specifically, this will clone the vcpkg repo, bootstrap, and install the dependencies specified in Axon's vcpkg manifest.
 
- Finally, create a file called host.txt also in the executable directory. The first line should contain the host ip address to encode in the QR code. The second line should be the port. Example:
- ```
-192.168.1.20
-8080
- ```
+- The Axon repo provides make.bat, which can be used to build the project.
+  - ````make.bat (debug | release)```` 
+  - Debug has a visible terminal window, while it is invisible in release. 
+
+Axon's behavior may be configured by modifying the contents of ````settings.txt````. If Axon cannot find this file, it will create one with default values in the same directory as ````Axon.exe````.
+
+## Usage
+- ````Axon <filename>```` - starts Axon in Serve mode.
+  - ````filename```` may be a relative path from the working directory, or a fully qualified filepath. 
+  - Generally on Windows, dragging and dropping file X onto executable B.exe will result in the following call: ````B.exe <fully qualified path of X>````. Thus, dragging and dropping files onto Axon.exe (or a shortcut to it), will work fine.
+
+- Pressing space in the Axon GUI will toggle between Serve and Receive modes.
+
+## Notes
+Axon is still in the alpha stages of development. Be aware that it currently uses unencrypted HTTP. Users are encouraged to avoid using Axon to transfer sensitive data.
