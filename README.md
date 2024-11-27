@@ -21,7 +21,7 @@ Axon's behavior may be configured by modifying the contents of ````settings.txt`
 Axon automatically launches in receive mode. Scanning the QR code or navigating to the URL shown below it in a web browser will cause the file's contents to be sent as an HTTP attachment.
 
 ### Receive mode
-Scanning the QR code will bring the user to a file upload page, hosted by the Axon server. Upon submission, the file data is transmitted back to Axon in a queue  will appear on the right side of the Axon GUI, with a prompt to accept or discard the file. Pressing ````y```` will save the file to the directory specified 
+Scanning the QR code will bring the user to a file upload page, hosted by the Axon server. Upon submission, the file data is transmitted back to Axon and the data is placed in a queue to be handled by the user. If there are any files in the queue, the filename of the first in the queue will appear on the right side of the Axon GUI, with a prompt to accept or discard the file. Pressing ````y```` will save the file to the directory specified in the ````save_to```` setting, relative to the executable file. Pressing ````n```` will discard the file.
 
 ## Notes - PLEASE READ
-Axon is still in the alpha stages of development. Be aware that it currently uses unencrypted HTTP. Users are cautioned against using Axon to transfer sensitive data.
+Axon is still in the alpha stages of development. It currently uses unencrypted HTTP. Users are cautioned against using Axon to transfer sensitive data.
