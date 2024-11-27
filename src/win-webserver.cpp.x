@@ -4,42 +4,9 @@
 #include <sstream>
 #include <thread>
 #include <vector>
+#include "common/common.hpp"
 
 #pragma comment(lib, "Ws2_32.lib")
-
-std::string getFilename(std::string path)
-{
-    while (path.find('/') != std::string::npos)
-        path.erase(0, 1);
-
-    while (path.find('\\') != std::string::npos)
-        path.erase(0, 1);
-
-    return path;
-}
-
-std::string parseRequestPath(char* cbuf)
-{
-    std::string buf = cbuf;
-
-    std::stringstream stream(buf);
-
-    std::string token;
-    for (std::string token; token != "GET"; stream >> token) {};
-
-    std::string path;
-    stream >> path;
-
-    return path;
-}
-
-std::string getFileExt(std::string fname)
-{
-    while (fname.find('.') != std::string::npos)
-        fname.erase(0, 1);
-
-    return fname;
-}
 
 void handleClient(SOCKET clientSocket, std::string correct_path, std::string &http_200_response, std::string &http_404_response) { //suggested content disposition
     // Buffer for receiving data

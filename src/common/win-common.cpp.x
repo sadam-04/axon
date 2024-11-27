@@ -1,13 +1,14 @@
+#include <string>
+#include <iostream>
+#include <fstream>
+
+#ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
-#include <iostream>
-#include <string>
-#include <fstream>
-#include "gethost.hpp"
-
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
+#endif
 
 std::string GetLANIPAddress() {
     ULONG bufferSize = 0;

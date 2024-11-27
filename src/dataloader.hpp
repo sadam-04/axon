@@ -1,1 +1,0 @@
-std::string loadFile(std::string filename);
