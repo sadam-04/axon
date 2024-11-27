@@ -6,7 +6,7 @@
 
 std::string defaults = 
     "host=auto\n"
-    "port=8082\n"
+    "port=8080\n"
     "sendbgcolor=FF353C00\n"
     "recvbgcolor=3C35FF00\n"
     "save_to=saved/\n"
