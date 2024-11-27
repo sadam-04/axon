@@ -6,12 +6,13 @@ Copyright (c) 2024 sadam-04
 Axon is a lightweight and portable HTTP file transfer tool focused on making transfers between a PC and phone as easy as possible.
 
 ## Setup
-- Install [git](https://git-scm.com/downloads)
-- Use ````vcpkg-setup.bat````(windows) or ````vcpkg.sh````(macOS) to set up vcpkg. This will clone the vcpkg repo, bootstrap it, and install the dependencies specified in Axon's vcpkg manifest.
+- Install [git](https://git-scm.com/downloads). Ensure git is added to the system PATH.
+- Install the [Visual C++ Compiler](https://visualstudio.microsoft.com/vs/features/cplusplus/).
+- Use ````vcpkg-setup.bat```` (windows) or ````vcpkg.sh```` (macOS) to set up vcpkg. This will clone the vcpkg repo, bootstrap it, and install the dependencies specified in Axon's vcpkg manifest.
 
-- Use make.bat to build the project.
+- Use ````make.bat```` to build the project. This directly calls MSVC++'s ````cl.exe````. As such, it is recommended that builds are done using the Developer Command Prompt which comes with MSVC++.
   - Usage: ````make.bat (debug | release)```` 
-  - Debug has a visible terminal window, while it is hidden in release. 
+  - Debug has a visible terminal window, while it is hidden in release.
 
 Axon's behavior may be configured by modifying the contents of ````settings.txt````, in the same directory as Axon. If Axon cannot find this file, it will create one with default values in the same directory as the executable.
 
