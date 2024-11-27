@@ -20,7 +20,7 @@ AXONSETTINGSCONF SETTINGS;
 int main(int argc, char* argv[]) {
 
     ROOT_DIR = getExecutableDirectory(); //DOES NOT include trailing slash/
-    SETTINGS = loadSettings(ROOT_DIR + "\\server.properties");
+    SETTINGS = loadSettings(ROOT_DIR + "\\settings.txt");
 
     std::string fname;
     std::string data;
