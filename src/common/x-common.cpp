@@ -5,6 +5,7 @@
 #include <random>
 #include <filesystem>
 #include <queue>
+#include <SFML/Graphics.hpp>
 #include "../common/common.hpp"
 #include "../settings/settings.hpp"
 #include "../nayuki-qr/qrcodegen.hpp"
@@ -248,7 +249,7 @@ unsigned int makebyte(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool
     return byte;
 }
 
-std::string makebmp(qrcodegen::QrCode qr)
+std::string makebmp(qrcodegen::QrCode qr, unsigned int color1, unsigned int color2)
 {
     std::string bmp;
     
@@ -275,9 +276,8 @@ std::string makebmp(qrcodegen::QrCode qr)
     bmp += pack32(2); //important colors
 
     //Color Table
-    bmp += pack32(0xFF000000);
-    bmp += pack32(0xFFFFFFFF);
-
+    bmp += pack32(color1);
+    bmp += pack32(color2);
     
     bool bits[8] = {0};
     for (int y = 0; y < qrsize; y++) {

@@ -78,6 +78,10 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRecvCandid
     url_text.setFillColor(sf::Color::White);
     recv_file.setFillColor(sf::Color::White);
 
+    fn_text.setFillColor(sf::Color(SETTINGS.textcolor));
+    url_text.setFillColor(sf::Color(SETTINGS.textcolor));
+    recv_file.setFillColor(sf::Color(SETTINGS.textcolor));
+
     // QR Sprite
     sf::Sprite qr_spr;
     qr_spr.setTexture(qr_tex);
