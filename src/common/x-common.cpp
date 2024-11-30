@@ -275,8 +275,8 @@ std::string makebmp(qrcodegen::QrCode qr)
     bmp += pack32(2); //important colors
 
     //Color Table
-    bmp += pack32(0xFF000000);
     bmp += pack32(0xFFFFFFFF);
+    bmp += pack32(0xFF000000);
 
     
     bool bits[8] = {0};
