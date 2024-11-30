@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <map>
 #include "settings.hpp"
 #include "../common/common.hpp"
 
@@ -35,17 +36,37 @@ void createDefaultSettings(std::string fname)
 
 void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
 {
+    std::map<std::string, std::string> cust_colors;
+
     std::string line;
     std::getline(f, line);
     do
     {
+        while (!line.empty() && (std::string(" \n\r\t").find(line[0]) != std::string::npos))
+            line.erase(0, 1);
+
+        while (!line.empty() && (std::string(" \n\r\t").find(line.back()) != std::string::npos))
+            line.pop_back();
+
         std::string::size_type eq = line.find('=');
         if (eq != std::string::npos)
         {
             std::string field = line.substr(0, eq);
             std::string val = line.substr(eq+1, line.size()-1);
-            while (val.back() == '\n' || val.back() == '\r' || val.back() == ' ')
-                val.pop_back();
+            //process val
+            if (val[0] == '$')
+            {
+                val.erase(0, 1);
+                std::cout << "varval: " + val + '\n';
+                std::map<std::string, std::string>::iterator ccol;    
+                if ((ccol = cust_colors.find(val)) != cust_colors.end())
+                {
+                    val = ccol->second;
+                    std::cout << "Found saved value: " + val + '\n';
+                }
+            }
+
+            //assign val
             if (field == "port")
                 settings.port = std::stoi(val);
             if (field == "host")
@@ -62,6 +83,11 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
                 settings.qr_light_color = std::stoul(val, nullptr, 16);
             if (field == "save_to")
                 settings.save_to = val;
+            if (field[0] == '$')
+            {
+                cust_colors.insert(std::pair(field.substr(1, field.size()-1), val));
+                std::cout << "adding new color $" + field.substr(1, field.size()-1) + " = " + val + '\n';
+            }
         }
     } while (std::getline(f, line));
 
