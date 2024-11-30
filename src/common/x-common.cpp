@@ -249,7 +249,7 @@ unsigned int makebyte(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool
     return byte;
 }
 
-std::string makebmp(qrcodegen::QrCode qr, unsigned int color1, unsigned int color2)
+std::string makebmp(qrcodegen::QrCode qr, unsigned int light_color, unsigned int dark_color)
 {
     std::string bmp;
     
@@ -276,8 +276,8 @@ std::string makebmp(qrcodegen::QrCode qr, unsigned int color1, unsigned int colo
     bmp += pack32(2); //important colors
 
     //Color Table
-    bmp += pack32(color1);
-    bmp += pack32(color2);
+    bmp += pack32(light_color);
+    bmp += pack32(dark_color);
     
     bool bits[8] = {0};
     for (int y = 0; y < qrsize; y++) {

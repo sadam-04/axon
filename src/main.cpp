@@ -50,8 +50,8 @@ int main(int argc, char* argv[]) {
     // Create QR
     qrcodegen::QrCode qr_send = qrcodegen::QrCode::encodeText(url_send.c_str(), qrcodegen::QrCode::Ecc::LOW);
     qrcodegen::QrCode qr_recv = qrcodegen::QrCode::encodeText(url_recv.c_str(), qrcodegen::QrCode::Ecc::LOW);
-    std::string qr_bmp_send = makebmp(qr_send, SETTINGS.qr_dark_color >> 8, SETTINGS.qr_light_color >> 8); // 0x ## RR GG BB
-    std::string qr_bmp_recv = makebmp(qr_recv, SETTINGS.qr_dark_color >> 8, SETTINGS.qr_light_color >> 8);
+    std::string qr_bmp_send = makebmp(qr_send, SETTINGS.qr_light_color >> 8, SETTINGS.qr_dark_color >> 8); // 0x ## RR GG BB
+    std::string qr_bmp_recv = makebmp(qr_recv, SETTINGS.qr_light_color >> 8, SETTINGS.qr_dark_color >> 8);
 
     // Create SFML window on main thread
     while (1)
