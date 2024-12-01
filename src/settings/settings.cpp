@@ -53,12 +53,10 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
             if (val[0] == '$')
             {
                 val.erase(0, 1);
-//                std::cout << "varval: " + val + '\n';
                 std::map<std::string, std::string>::iterator ccol;    
                 if ((ccol = cust_colors.find(val)) != cust_colors.end())
                 {
                     val = ccol->second;
-//                    std::cout << "Found saved value: " + val + '\n';
                 }
             }
 
@@ -81,7 +79,7 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
                 settings.save_to = val;
             if (field[0] == '$')
             {
-                // trim $ field
+                // trim leading $ from field
                 std::string tfield = field.substr(1, field.size()-1);
 
                 std::cout << "Before: (" << tfield << ',' << val << ")\n";
@@ -93,7 +91,6 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
                 std::cout << "After: (" << tfield << ',' << val << ")\n";
 
                 cust_colors.insert(std::pair(tfield, val));
-//                std::cout << "adding new color $" + tfield + " = " + val + '\n';
             }
         }
     } while (std::getline(f, line));
