@@ -134,6 +134,9 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRecvCandid
             if (event.type == sf::Event::KeyPressed)
                 switch (event.key.scancode)
                 {
+                    case sf::Keyboard::Scan::Escape:
+                        window.close();
+                        exit(0);
                     case sf::Keyboard::Scan::Space:
                         window.close();
                         return 0;
