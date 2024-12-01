@@ -327,3 +327,21 @@ int pop_filerc(std::queue<FileRecvCandidate> &q)
         return 1;
     }
 }
+
+void trimWhitespaceL(std::string &str)
+{
+    while (!str.empty() && (std::string(" \n\r\t").find(str[0]) != std::string::npos))
+        str.erase(0, 1);
+}
+
+void trimWhitespaceR(std::string &str)
+{
+    while (!str.empty() && (std::string(" \n\r\t").find(str.back()) != std::string::npos))
+        str.pop_back();
+}
+
+void trimWhitespace(std::string &str)
+{
+    trimWhitespaceL(str);
+    trimWhitespaceR(str);
+}

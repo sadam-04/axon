@@ -18,6 +18,10 @@ std::string GetLANIPAddress();
 
 std::string makebmp(qrcodegen::QrCode qr, unsigned int color1, unsigned int color2);
 
+void trimWhitespaceL(std::string &str);
+void trimWhitespaceR(std::string &str);
+void trimWhitespace(std::string &str);
+
 struct FileRecvCandidate {
     std::string filename;
     std::string data;
