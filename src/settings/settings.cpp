@@ -42,11 +42,7 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
     std::getline(f, line);
     do
     {
-        while (!line.empty() && (std::string(" \n\r\t").find(line[0]) != std::string::npos))
-            line.erase(0, 1);
-
-        while (!line.empty() && (std::string(" \n\r\t").find(line.back()) != std::string::npos))
-            line.pop_back();
+        trimWhitespace(line);
 
         std::string::size_type eq = line.find('=');
         if (eq != std::string::npos)
@@ -57,12 +53,12 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
             if (val[0] == '$')
             {
                 val.erase(0, 1);
-                std::cout << "varval: " + val + '\n';
+//                std::cout << "varval: " + val + '\n';
                 std::map<std::string, std::string>::iterator ccol;    
                 if ((ccol = cust_colors.find(val)) != cust_colors.end())
                 {
                     val = ccol->second;
-                    std::cout << "Found saved value: " + val + '\n';
+//                    std::cout << "Found saved value: " + val + '\n';
                 }
             }
 
@@ -85,8 +81,19 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
                 settings.save_to = val;
             if (field[0] == '$')
             {
-                cust_colors.insert(std::pair(field.substr(1, field.size()-1), val));
-                std::cout << "adding new color $" + field.substr(1, field.size()-1) + " = " + val + '\n';
+                // trim $ field
+                std::string tfield = field.substr(1, field.size()-1);
+
+                std::cout << "Before: (" << tfield << ',' << val << ")\n";
+
+                // trim whitespace from field and val
+                trimWhitespace(tfield);
+                trimWhitespace(val);
+
+                std::cout << "After: (" << tfield << ',' << val << ")\n";
+
+                cust_colors.insert(std::pair(tfield, val));
+//                std::cout << "adding new color $" + tfield + " = " + val + '\n';
             }
         }
     } while (std::getline(f, line));
