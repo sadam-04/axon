@@ -117,8 +117,9 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
 "            <label for=\"file-input\" class=\"file-input-label\">"
 "                Browse"
 "            </label>"
-"            <input id=\"file-input\" name=\"file\" type=\"file\">"
-"            <input type=\"submit\">"
+"            <input id=\"file-input\" name=\"file\" type=\"file\"\\>"
+"            <input type=\"text\" name=\"strdata\"\\>"
+"            <input type=\"submit\"\\>"
 "        </form>"
 "    </div>"
 "</body>"
@@ -161,19 +162,33 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
             const auto &content_type = file_info.content_type; // MIME type
             const auto &content = file_info.content;      // File content as string
 
-            if (
-                filename.find("\\") != std::string::npos &&
-                filename.find("/")  != std::string::npos
-            )
-            {
-                std::cerr << "Suspicious filename (" << filename << "). Exiting.\n";
-                exit(0);
-            }
+            std::cout << "Name:"
+                << "\n\t" << name << '\n';
+                // << "\n\t" << filename
+                // << "\n\t" << content_type
+                // << "\n\t" << content
+                // << '\n';
 
-            // std::thread saveThread(save_file, filename, content, req.remote_addr);
-            // saveThread.detach();
-            std::lock_guard<std::mutex> lock(file_q_mutex);
-            file_q.push({filename, content, req.remote_addr, false});
+            if (name == "strdata")
+            {
+                std::lock_guard<std::mutex> lock(file_q_mutex);
+                file_q.push({"text.txt", content, req.remote_addr, false});   
+            }
+            else if (!filename.empty()) {
+                if (
+                    filename.find("\\") != std::string::npos &&
+                    filename.find("/")  != std::string::npos
+                )
+                {
+                    std::cerr << "Suspicious filename (" << filename << "). Exiting.\n";
+                    exit(0);
+                }
+
+                // std::thread saveThread(save_file, filename, content, req.remote_addr);
+                // saveThread.detach();
+                std::lock_guard<std::mutex> lock(file_q_mutex);
+                file_q.push({filename, content, req.remote_addr, false});
+            }
 
             res.status = 301;
             res.set_header("Location", url_path_recv);
