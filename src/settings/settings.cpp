@@ -100,9 +100,26 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
         settings.host = GetLANIPAddress();
 }
 
-AXONSETTINGSCONF loadSettings(std::string fname)
+AXONSETTINGSCONF loadSettings(unsigned int argc, char** argv, std::string fname)
 {
     AXONSETTINGSCONF settings;
+
+    //load c-style args into c++ format
+    std::vector<std::string> args;
+    std::cout << "args:";
+    for (int arg = 0; arg < argc; arg++)
+    {
+        args.push_back(argv[arg]);
+        std::cout << "[" << argv[arg] << "] ";
+    }
+    std::cout << '\n';
+
+    settings.url_scrambling = true;
+    for (std::string arg : args)
+    {
+        if (arg == "/DISABLEURLSCRAMBLING")
+            settings.url_scrambling = false;
+    }
 
     std::ifstream sett_file(fname);
     if (!sett_file.is_open())

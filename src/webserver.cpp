@@ -10,7 +10,7 @@
 extern AXONSETTINGSCONF SETTINGS;
 extern std::string ROOT_DIR;
 
-int webserver(std::string filepath, std::string &data, unsigned int port, std::string url_path_send, std::string url_path_recv, std::queue<FileRecvCandidate> &file_q, std::mutex& file_q_mutex)
+int webserver(std::string filepath, std::string &data, unsigned int port, std::string url_path_send, std::string url_path_recv, std::queue<FileRC> &file_q, std::mutex& file_q_mutex)
 {
     httplib::Server svr;
 
@@ -172,7 +172,7 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
             if (name == "strdata")
             {
                 std::lock_guard<std::mutex> lock(file_q_mutex);
-                file_q.push({"text.txt", content, req.remote_addr, false});   
+                file_q.push({"text-" + req.remote_addr + ".txt", content, req.remote_addr, false});   
             }
             else if (!filename.empty()) {
                 if (
@@ -190,15 +190,16 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
                 file_q.push({filename, content, req.remote_addr, false});
             }
 
-            res.status = 301;
-            res.set_header("Location", url_path_recv);
-
             // std::cout << "name: " << name << '\n';
             // // std::cout << "file_info: " << file_info << '\n';
             // std::cout << "filename: " << filename << '\n';
             // std::cout << "content_type: " << content_type << '\n';
             // std::cout << "content: " << content << '\n';
         }
+
+        std::cout << "SETTING HEADER FOR REDIRECT...\n";
+        res.status = 301;
+        res.set_header("Location", url_path_recv);
     });
 
     // 404 handler

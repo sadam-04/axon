@@ -7,7 +7,8 @@ struct AXONSETTINGSCONF
     unsigned int textcolor;
     unsigned int qr_dark_color;
     unsigned int qr_light_color;
+    bool url_scrambling;
     std::string save_to;
 };
 
-AXONSETTINGSCONF loadSettings(std::string fname);
+AXONSETTINGSCONF loadSettings(unsigned int argc, char** argv, std::string fname);

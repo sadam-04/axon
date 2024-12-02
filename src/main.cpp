@@ -20,28 +20,28 @@ AXONSETTINGSCONF SETTINGS;
 int main(int argc, char* argv[]) {
 
     ROOT_DIR = getExecutableDirectory(); //DOES NOT include trailing slash/
-    SETTINGS = loadSettings(ROOT_DIR + "\\settings.txt");
+    SETTINGS = loadSettings(argc, argv, ROOT_DIR + "\\settings.txt");
 
     std::string fname;
     std::string data;
-    if (argc == 2)
+    if (argc >= 2)
         fname = argv[1];
     
     // Load target data from file
     data = loadFile(fname);
 
     // Build url
-    std::string url_path_send = '/' + randAN(5);
-    std::string url_path_recv = '/' + randAN(5);
+    std::string url_path_send = '/' + (SETTINGS.url_scrambling ? randAN(5) : "download");
+    std::string url_path_recv = '/' + (SETTINGS.url_scrambling ? randAN(5) : "upload");
 
-    while (url_path_recv == url_path_send)
-        url_path_recv = '/' + randAN(5);
+    while (SETTINGS.url_scrambling && url_path_recv == url_path_send)
+        url_path_recv = '/' + (SETTINGS.url_scrambling ? randAN(5) : "file");
 
     std::string url_send = "http://" + SETTINGS.host + ":" + std::to_string(SETTINGS.port) + url_path_send;
     std::string url_recv = "http://" + SETTINGS.host + ":" + std::to_string(SETTINGS.port) + url_path_recv;
 
     // File candidate queue for RECV mode
-    std::queue<FileRecvCandidate> file_q;
+    std::queue<FileRC> file_q;
     std::mutex file_q_mutex;
 
     // Start webserver
