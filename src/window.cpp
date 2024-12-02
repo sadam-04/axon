@@ -29,7 +29,7 @@ void centerObj(sf::Transformable &obj, sf::FloatRect &bounds, sf::RenderWindow &
 
 extern std::string ROOT_DIR;
 
-int create_window(std::string qr_bmp, std::string url, std::queue<FileRecvCandidate> &file_q, std::mutex &file_q_mutex, std::string filename = "") {
+int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_q, std::mutex &file_q_mutex, std::string filename = "") {
     const unsigned int W_WIDTH_SEND = 375;
     const unsigned int W_WIDTH_RECV = 675;
     const unsigned int W_HEIGHT = 380;
@@ -102,9 +102,7 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRecvCandid
     url_text.setPosition(url_text.getPosition().x, qr_spr.getGlobalBounds().top + qr_spr.getGlobalBounds().height + 6.f);
     fn_text.setPosition(fn_text.getPosition().x, qr_spr.getGlobalBounds().top - fn_text.getLocalBounds().height - 10.f);
 
-    // horizontally shift file title
-    // recv_file.move(window.getSize().x/4.f, 0);
-
+    // file queue update timer
     sf::Clock clock;
     sf::Time interval = sf::milliseconds(500); //500ms
     sf::Time elapsedTime = interval; //init to interval so the first trigger occurs immediately

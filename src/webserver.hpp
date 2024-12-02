@@ -1,1 +1,1 @@
-int webserver(std::string filepath, std::string &data, unsigned int port, std::string url_path_send, std::string url_path_recv, std::queue<FileRecvCandidate> &file_q, std::mutex& file_q_mutex);
+int webserver(std::string filepath, std::string &data, unsigned int port, std::string url_path_send, std::string url_path_recv, std::queue<FileRC> &file_q, std::mutex& file_q_mutex);
