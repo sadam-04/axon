@@ -2,11 +2,16 @@
 #define _COMMON_HPP_
 
 #include <queue>
+#include <filesystem>
 #include "../nayuki-qr/qrcodegen.hpp"
 
+std::string getFilepath(std::string path);
 std::string getFilename(std::string path);
-std::string parseRequestPath(char* cbuf);
 std::string getFileExt(std::string fname);
+
+std::string trimFileExt(std::string fname);
+
+std::string parseRequestPath(char* cbuf);
 
 std::string randAN(unsigned int len);
 
@@ -24,11 +29,32 @@ void trimWhitespace(std::string &str);
 
 bool fileExists(std::string filename);
 
-struct FileRC {
-    std::string filename;
+class FileRC {
+private:
+    std::string path;
+
+    std::string name;
+    std::string postfix;
+    std::string extension;
+
     std::string data;
     std::string sender;
     bool approved;
+public:
+    FileRC(std::string fullpath, std::string data, std::string sender);
+
+    void print();
+
+    std::string getShortName();
+    std::string getFullName();
+
+    std::string& getData();
+
+    std::string getSender();
+
+    bool is_approved();
+
+    int save();
 };
 
 int pop_filerc(std::queue<FileRC> &q);

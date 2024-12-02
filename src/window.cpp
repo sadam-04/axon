@@ -120,7 +120,7 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
             else
             {
                 std::lock_guard<std::mutex> lock(file_q_mutex);
-                recv_file.setString(file_q.front().filename + "\n    (y) to accept\n    (n) to discard");
+                recv_file.setString(file_q.front().getShortName() + "\n    (y) to accept\n    (n) to discard");
             }
         }
         while (window.pollEvent(event)) {
@@ -141,7 +141,6 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
                     case sf::Keyboard::Scan::Y:
                         if (!file_q.empty())
                         {
-                            file_q.front().approved = true; //unnecessary
                             std::thread fileSave(pop_filerc, std::ref(file_q));
                             fileSave.detach();
                         }
