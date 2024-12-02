@@ -57,9 +57,9 @@ Users may define their own variables to be reused across multiple fields in the 
 
 &nbsp;&nbsp;&nbsp;&nbsp;`$identifier = value`
 
-By default, the following variables are defined:
+By default, the following variables are defined in the settings file:
 - `$white = FFFFFFFF`
-- `$axon_blue = 222255FF`
+- `$dark_blue = 222255FF`
 
 **Comments**
 
@@ -83,12 +83,12 @@ Note: Colors are encoded in hexadecimal RGBA format. E.g. Red would be encoded a
   - Background color in Send mode
 - `recvbgcolor` = `$white`
   - Background color in Receive mode
-- `textcolor` = `$axon_blue`
+- `textcolor` = `$dark_blue`
   - Text color
   
 **QR color settings** - Note that extreme changes to these shades may result in an invalid or unreadable QR code.
 
-- `qr_dark_color` = `$axon_blue`
+- `qr_dark_color` = `$dark_blue`
   - Color to be used in place of black cells in the QR code
 - `qr_light_color` = `$white`
   - Color to be used in place of white cells in the QR code
