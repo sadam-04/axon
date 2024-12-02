@@ -130,6 +130,14 @@ std::string GetLANIPAddress() {
 }
 #endif
 
+std::string getFilepath(std::string path)
+{
+    while (!path.empty() && std::string("\\/").find(path.back()) == std::string::npos)
+        path.pop_back();
+
+    return path;
+}
+
 std::string getFilename(std::string path)
 {
     while (path.find('/') != std::string::npos)
@@ -162,6 +170,12 @@ std::string getFileExt(std::string fname)
         fname.erase(0, 1);
 
     return fname;
+}
+
+std::string trimFileExt(std::string fname)
+{
+    int ext = fname.find_last_of('.');
+    return fname.substr(0, ext);
 }
 
 std::string randAN(unsigned int len) {
@@ -325,30 +339,10 @@ std::string applyFilenamePostfix(std::string filename, std::string postfix)
 
 int pop_filerc(std::queue<FileRC> &q)
 {
-    FileRC filerc = q.front();
+    int res = q.front().save();
     q.pop();
 
-    std::string filepath = ROOT_DIR + '/' + SETTINGS.save_to;
-    std::string filename = filerc.filename;
-
-    std::string fullname = filepath + filename;
-    
-    while (fileExists(fullname))
-    {
-        std::cout << "file " << fullname << " already exists\n";
-        fullname = filepath + applyFilenamePostfix(filename, randAN(5));
-    }
-
-    std::filesystem::create_directory(ROOT_DIR + '/' + SETTINGS.save_to); //c++17
-    std::ofstream file(fullname, std::ios::binary);
-    if (file) {
-        file.write(filerc.data.c_str(), filerc.data.size());
-        file.close();
-        return 0;
-    } else {
-        std::cerr << "Failed to save file " << filerc.filename << "(" << fullname << ")\n";
-        return 1;
-    }
+    return res;
 }
 
 void trimWhitespaceL(std::string &str)
@@ -372,14 +366,70 @@ void trimWhitespace(std::string &str)
 bool fileExists(std::string filename)
 {
     std::ifstream check_exists(filename);
-    if (check_exists.is_open())
+    return check_exists.is_open();   
+}
+
+FileRC::FileRC(std::string name, std::string data, std::string sender) {
+    this->name = trimFileExt(name);
+    
+    this->path = ROOT_DIR + '/' + SETTINGS.save_to;
+    this->postfix = "";
+    this->extension = getFileExt(name);
+    
+    this->data = data;
+    this->sender = sender;
+}
+
+void FileRC::print()
+{
+    std::cout << "File " << this->name << " data:\n";
+    std::cout << "  path: " << this->path << '\n';
+    std::cout << "  postfix: " << this->postfix << '\n';
+    std::cout << "  extension: " << this->extension << '\n';
+    std::cout << "  data: " << this->data << '\n';
+    std::cout << "  sender: " << this->sender << "\n\n\n";
+}
+
+std::string FileRC::getShortName()
+{
+    return name + '.' + extension;
+}
+
+std::string& FileRC::getData()
+{
+    return data;
+}
+
+std::string FileRC::getSender()
+{
+    return sender;
+}
+
+bool FileRC::is_approved()
+{
+    return approved;
+}
+
+std::string FileRC::getFullName()
+{
+    return path + name + (postfix == "" ? "" : '-' + postfix) + '.' + extension;
+}
+
+int FileRC::save()
+{
+    while (fileExists(getFullName()))
     {
-        std::string word;
-        check_exists >> word;
-        std::cout << "WORD:" << word << '\n';
-        std::cout << "FILE EXISTS!!!\n";
-        return true;
+        postfix = randAN(5);
     }
-    std::cout << "FILE DOES NOT EXIST!!!\n";
-    return false;
+
+    std::filesystem::create_directory(std::filesystem::path(path)); //c++17
+    std::ofstream file(getFullName(), std::ios::binary);
+    if (file) {
+        file.write(data.c_str(), data.size());
+        file.close();
+        return 0;
+    } else {
+        std::cerr << "Failed to save file " << getShortName() << "(" << getFullName() << ")\n";
+        return 1;
+    }
 }
