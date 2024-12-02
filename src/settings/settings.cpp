@@ -10,12 +10,15 @@ std::string defaults =
     "host=auto\n"
     "port=8080\n"
     "\n"
+    "$white=FFFFFFFF\n"
+    "$dark_blue=222255FF\n"
+    "\n"
     "# colors are encoded in RGBA format #\n"
-    "sendbgcolor=FF353CFF\n"
-    "recvbgcolor=3C35FFFF\n"
-    "textcolor=FFFFFFFF\n"
-    "qr_dark_color=000000FF\n"
-    "qr_light_color=FFFFFFFF\n"
+    "sendbgcolor=$white\n"
+    "recvbgcolor=$white\n"
+    "textcolor=$dark_blue\n"
+    "qr_dark_color=$dark_blue\n"
+    "qr_light_color=$white\n"
     "\n"
     "save_to=saved/\n"
 ;
@@ -76,7 +79,11 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
             if (field == "qr_light_color")
                 settings.qr_light_color = std::stoul(val, nullptr, 16);
             if (field == "save_to")
+            {
+                if (std::string("\\/").find(val.back()) == std::string::npos)
+                    val.push_back('/');
                 settings.save_to = val;
+            }
             if (field[0] == '$')
             {
                 // trim leading $ from field
