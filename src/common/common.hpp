@@ -22,13 +22,15 @@ void trimWhitespaceL(std::string &str);
 void trimWhitespaceR(std::string &str);
 void trimWhitespace(std::string &str);
 
-struct FileRecvCandidate {
+bool fileExists(std::string filename);
+
+struct FileRC {
     std::string filename;
     std::string data;
     std::string sender;
     bool approved;
 };
 
-int pop_filerc(std::queue<FileRecvCandidate> &q);
+int pop_filerc(std::queue<FileRC> &q);
 
 #endif

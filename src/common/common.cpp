@@ -311,19 +311,42 @@ std::string makebmp(qrcodegen::QrCode qr, unsigned int light_color, unsigned int
     return bmp;
 }
 
-int pop_filerc(std::queue<FileRecvCandidate> &q)
+//Applies a postfix to a filename, before the file extension. For example, file.txt + aBc12 = fileaBc12.txt
+std::string applyFilenamePostfix(std::string filename, std::string postfix)
 {
-    FileRecvCandidate filerc = q.front();
+    char ext_mark = '.';
+
+    size_t ext = filename.find_last_of(ext_mark);
+    if (ext == std::string::npos)
+        return filename + postfix;
+
+    return filename.substr(0, ext) + postfix + filename.substr(ext, filename.size()-1);
+}
+
+int pop_filerc(std::queue<FileRC> &q)
+{
+    FileRC filerc = q.front();
     q.pop();
 
-    std::filesystem::create_directory(ROOT_DIR + '/' + SETTINGS.save_to);
-    std::ofstream file(ROOT_DIR + '/' + SETTINGS.save_to + filerc.filename, std::ios::binary);
+    std::string filepath = ROOT_DIR + '/' + SETTINGS.save_to;
+    std::string filename = filerc.filename;
+
+    std::string fullname = filepath + filename;
+    
+    while (fileExists(fullname))
+    {
+        std::cout << "file " << fullname << " already exists\n";
+        fullname = filepath + applyFilenamePostfix(filename, randAN(5));
+    }
+
+    std::filesystem::create_directory(ROOT_DIR + '/' + SETTINGS.save_to); //c++17
+    std::ofstream file(fullname, std::ios::binary);
     if (file) {
         file.write(filerc.data.c_str(), filerc.data.size());
         file.close();
         return 0;
     } else {
-        std::cerr << "Failed to save file " << filerc.filename << "(" << ROOT_DIR + '/' + SETTINGS.save_to + filerc.filename << ")\n";
+        std::cerr << "Failed to save file " << filerc.filename << "(" << fullname << ")\n";
         return 1;
     }
 }
@@ -344,4 +367,19 @@ void trimWhitespace(std::string &str)
 {
     trimWhitespaceL(str);
     trimWhitespaceR(str);
+}
+
+bool fileExists(std::string filename)
+{
+    std::ifstream check_exists(filename);
+    if (check_exists.is_open())
+    {
+        std::string word;
+        check_exists >> word;
+        std::cout << "WORD:" << word << '\n';
+        std::cout << "FILE EXISTS!!!\n";
+        return true;
+    }
+    std::cout << "FILE DOES NOT EXIST!!!\n";
+    return false;
 }
