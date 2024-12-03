@@ -7,3 +7,4 @@ src/SFML-2.6.2/
 /font
 vcpkg_installed/
 vcpkg/
+td.bat
