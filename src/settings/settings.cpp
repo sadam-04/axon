@@ -41,6 +41,23 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
 {
     std::map<std::string, std::string> cust_colors;
 
+    cust_colors.insert(std::pair("white",   "FFFFFFFF"));
+    cust_colors.insert(std::pair("silver",  "C0C0C0FF"));
+    cust_colors.insert(std::pair("gray",    "808080FF"));
+    cust_colors.insert(std::pair("black",   "000000FF"));
+    cust_colors.insert(std::pair("red",     "FF0000FF"));
+    cust_colors.insert(std::pair("maroon",  "800000FF"));
+    cust_colors.insert(std::pair("yellow",  "FFFF00FF"));
+    cust_colors.insert(std::pair("olive",   "808000FF"));
+    cust_colors.insert(std::pair("lime",    "00FF00FF"));
+    cust_colors.insert(std::pair("green",   "008000FF"));
+    cust_colors.insert(std::pair("aqua",    "FFFF00FF"));
+    cust_colors.insert(std::pair("teal",    "008080FF"));
+    cust_colors.insert(std::pair("blue",    "0000FFFF"));
+    cust_colors.insert(std::pair("navy",    "000080FF"));
+    cust_colors.insert(std::pair("fuchsia", "FF00FFFF"));
+    cust_colors.insert(std::pair("purple",  "800080FF"));
+    
     std::string line;
     std::getline(f, line);
     do
@@ -52,6 +69,13 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
         {
             std::string field = line.substr(0, eq);
             std::string val = line.substr(eq+1, line.size()-1);
+
+            trimWhitespace(field);
+            trimWhitespace(val);
+
+            std::cout << "field: " << '[' << field << ']' << "\n";
+            std::cout << "val: " << '[' << val << ']' << "\n\n\n";
+
             //process val
             if (val[0] == '$')
             {
@@ -63,6 +87,8 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
                 }
             }
 
+
+            
             //assign val
             if (field == "port")
                 settings.port = std::stoi(val);
@@ -87,13 +113,13 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
             if (field[0] == '$')
             {
                 // trim leading $ from field
-                std::string tfield = field.substr(1, field.size()-1);
+                std::string identifier = field.substr(1, field.size()-1);
 
                 // trim whitespace from field and val
-                trimWhitespace(tfield);
+                trimWhitespace(identifier);
                 trimWhitespace(val);
 
-                cust_colors.insert(std::pair(tfield, val));
+                cust_colors.insert(std::pair(identifier, val));
             }
         }
     } while (std::getline(f, line));
