@@ -148,12 +148,14 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
                         {
                             std::thread fileSave(pop_filerc, std::ref(file_q));
                             fileSave.detach();
+                            elapsedTime = interval; // refresh file queue display
                         }
                         break;
                     case sf::Keyboard::Scan::N:
                         if (!file_q.empty())
                         {
                             file_q.pop();
+                            elapsedTime = interval; // refresh file queue display
                         }
                 }
         }
