@@ -143,11 +143,17 @@ int webserver(std::string filepath, std::string &data, unsigned int port, std::s
         }
     }
 
-    svr.Get(url_path_send, [mimetype, &data, filepath](const httplib::Request &, httplib::Response &res) {
-        res.set_content(data, mimetype);
-        res.set_header("Content-Disposition", "attachment; filename=\""+getFilename(filepath)+"\"");
-    });
+    //send mode
+    if (!SETTINGS.served_file.empty())
+    {
+    if (!url_path_send.empty())
+        svr.Get(url_path_send, [mimetype, &data, filepath](const httplib::Request &, httplib::Response &res) {
+            res.set_content(data, mimetype);
+            res.set_header("Content-Disposition", "attachment; filename=\""+getFilename(filepath)+"\"");
+        });
+    }
 
+    //recv mode
     svr.Get(url_path_recv, [&body_upload](const httplib::Request &, httplib::Response &res){
         res.set_content(body_upload, "text/html");
     });

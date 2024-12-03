@@ -1,2 +1,2 @@
 @ECHO OFF
-call .\out\debug\Axon.exe README.md /DISABLEURLSCRAMBLING
+call .\out\debug\Axon.exe /DISABLEURLSCRAMBLING

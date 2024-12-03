@@ -1,5 +1,11 @@
 struct AXONSETTINGSCONF
 {
+    //command line settings
+    std::string executable;
+    std::string served_file;
+    bool url_scrambling;
+
+    //settings.txt
     std::string host;
     unsigned int port;
     unsigned int sendbgcolor;
@@ -7,7 +13,6 @@ struct AXONSETTINGSCONF
     unsigned int textcolor;
     unsigned int qr_dark_color;
     unsigned int qr_light_color;
-    bool url_scrambling;
     std::string save_to;
 };
 

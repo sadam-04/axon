@@ -111,6 +111,7 @@ AXONSETTINGSCONF loadSettings(unsigned int argc, char** argv, std::string fname)
 {
     AXONSETTINGSCONF settings;
 
+
     //load c-style args into c++ format
     std::vector<std::string> args;
     std::cout << "args:";
@@ -121,13 +122,28 @@ AXONSETTINGSCONF loadSettings(unsigned int argc, char** argv, std::string fname)
     }
     std::cout << '\n';
 
+    //default command line setting values
+    settings.executable = args[0];
+        args.erase(args.begin());
+    settings.served_file = "";
     settings.url_scrambling = true;
+
+    //parse command line args
     for (std::string arg : args)
-    {
-        if (arg == "/DISABLEURLSCRAMBLING")
-            settings.url_scrambling = false;
+    {   
+        if (arg[0] == '/')
+        {
+            if (arg == "/DISABLEURLSCRAMBLING")
+                settings.url_scrambling = false;
+        }
+        else
+        {
+            //assume this arg is the file to be served
+            settings.served_file = arg;
+        }
     }
 
+    //check if settings file exists. if not, create defaults
     std::ifstream sett_file(fname);
     if (!sett_file.is_open())
     {

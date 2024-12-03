@@ -136,8 +136,13 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
                         window.close();
                         exit(0);
                     case sf::Keyboard::Scan::Space:
-                        window.close();
-                        return 0;
+                        if (!SETTINGS.served_file.empty())
+                        {
+                            window.close();
+                            return 0;
+                        }
+                        else
+                            break;
                     case sf::Keyboard::Scan::Y:
                         if (!file_q.empty())
                         {

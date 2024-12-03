@@ -22,13 +22,11 @@ int main(int argc, char* argv[]) {
     ROOT_DIR = getExecutableDirectory(); //DOES NOT include trailing slash/
     SETTINGS = loadSettings(argc, argv, ROOT_DIR + "\\settings.txt");
 
-    std::string fname;
     std::string data;
-    if (argc >= 2)
-        fname = argv[1];
     
     // Load target data from file
-    data = loadFile(fname);
+    if (!SETTINGS.served_file.empty())
+        data = loadFile(SETTINGS.served_file);
 
     // Build url
     std::string url_path_send = '/' + (SETTINGS.url_scrambling ? randAN(5) : "download");
@@ -45,7 +43,7 @@ int main(int argc, char* argv[]) {
     std::mutex file_q_mutex;
 
     // Start webserver
-    std::thread ws_thread(webserver, fname, std::ref(data), SETTINGS.port, url_path_send, url_path_recv, std::ref(file_q), std::ref(file_q_mutex));
+    std::thread ws_thread(webserver, SETTINGS.served_file, std::ref(data), SETTINGS.port, url_path_send, url_path_recv, std::ref(file_q), std::ref(file_q_mutex));
 
     // Create QR
     qrcodegen::QrCode qr_send = qrcodegen::QrCode::encodeText(url_send.c_str(), qrcodegen::QrCode::Ecc::LOW);
@@ -56,7 +54,8 @@ int main(int argc, char* argv[]) {
     // Create SFML window on main thread
     while (1)
     {
-        if (create_window(qr_bmp_send, url_send, file_q, file_q_mutex, getFilename(fname))) break;
+        if (!SETTINGS.served_file.empty())
+            if (create_window(qr_bmp_send, url_send, file_q, file_q_mutex, getFilename(SETTINGS.served_file))) break;
         if (create_window(qr_bmp_recv, url_recv, file_q, file_q_mutex)) break;
     }
     // std::string paws;
