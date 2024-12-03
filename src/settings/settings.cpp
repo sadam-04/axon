@@ -89,13 +89,9 @@ void parseSettingsFile(std::istream &f, AXONSETTINGSCONF &settings)
                 // trim leading $ from field
                 std::string tfield = field.substr(1, field.size()-1);
 
-                std::cout << "Before: (" << tfield << ',' << val << ")\n";
-
                 // trim whitespace from field and val
                 trimWhitespace(tfield);
                 trimWhitespace(val);
-
-                std::cout << "After: (" << tfield << ',' << val << ")\n";
 
                 cust_colors.insert(std::pair(tfield, val));
             }
