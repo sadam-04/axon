@@ -68,12 +68,12 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
     fn_text.setFont(font);
     url_text.setFont(font);
     recv_file.setFont(font);
-    fn_text.setString((MODE_SEND ? "Serving: " + filename : "Receiving"));
+    fn_text.setString((MODE_SEND ? filename : "Receiving"));
     url_text.setString(url);
     // set recv text later
-    fn_text.setCharacterSize(16);
-    url_text.setCharacterSize(14);
-    recv_file.setCharacterSize(10);
+    fn_text.setCharacterSize(22);
+    url_text.setCharacterSize(16);
+    recv_file.setCharacterSize(16);
     fn_text.setFillColor(sf::Color::White);
     url_text.setFillColor(sf::Color::White);
     recv_file.setFillColor(sf::Color::White);
@@ -99,13 +99,15 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
     recv_file.setPosition(W_WIDTH_RECV * 0.55f, W_HEIGHT * 0.1f);
 
     // Vertically shift header and footer text
-    url_text.setPosition(url_text.getPosition().x, qr_spr.getGlobalBounds().top + qr_spr.getGlobalBounds().height + 6.f);
-    fn_text.setPosition(fn_text.getPosition().x, qr_spr.getGlobalBounds().top - fn_text.getLocalBounds().height - 10.f);
+    url_text.setPosition(url_text.getPosition().x, qr_spr.getGlobalBounds().top + qr_spr.getGlobalBounds().height + 10.f);
+    fn_text.setPosition(fn_text.getPosition().x, qr_spr.getGlobalBounds().top - fn_text.getLocalBounds().height - 15.f);
 
     // file queue update timer
     sf::Clock clock;
     sf::Time interval = sf::milliseconds(500); //500ms
     sf::Time elapsedTime = interval; //init to interval so the first trigger occurs immediately
+
+    bool queue_empty = true;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -116,9 +118,13 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
             
             elapsedTime -= interval; // Reset elapsed time, keep the remaining time for accuracy
             if (file_q.empty())
+            {
+                queue_empty = true;
                 recv_file.setString("Uploads will appear here");
+            }
             else
             {
+                queue_empty = true;
                 std::lock_guard<std::mutex> lock(file_q_mutex);
                 recv_file.setString(file_q.front().getShortName() + "\n    (y) to accept\n    (n) to discard");
             }
