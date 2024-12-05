@@ -102,6 +102,15 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
     url_text.setPosition(url_text.getPosition().x, qr_spr.getGlobalBounds().top + qr_spr.getGlobalBounds().height + 10.f);
     fn_text.setPosition(fn_text.getPosition().x, qr_spr.getGlobalBounds().top - fn_text.getLocalBounds().height - 15.f);
 
+    // file accept / discard buttons
+    sf::RectangleShape accept_btn({40, 40}), discard_btn({40, 40});
+    accept_btn.setFillColor(sf::Color::Green);
+    discard_btn.setFillColor(sf::Color::Red);
+    centerObj(accept_btn, accept_btn.getGlobalBounds(), window, HORIZ | VERT);
+    accept_btn.move({50.f, 0.f});
+    centerObj(discard_btn, discard_btn.getGlobalBounds(), window, HORIZ | VERT);
+    discard_btn.move({150.f, 0.f});
+
     // file queue update timer
     sf::Clock clock;
     sf::Time interval = sf::milliseconds(500); //500ms
@@ -124,7 +133,7 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
             }
             else
             {
-                queue_empty = true;
+                queue_empty = false;
                 std::lock_guard<std::mutex> lock(file_q_mutex);
                 recv_file.setString(file_q.front().getShortName() + "\n    (y) to accept\n    (n) to discard");
             }
@@ -134,6 +143,28 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
             {
                 window.close();
                 return 1;
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                // std::cout << "EVENT!!!!!!!!!\n";
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (accept_btn.getGlobalBounds().contains(mousePos.x, mousePos.y))
+                {
+                    if (!file_q.empty())
+                    {
+                        std::thread fileSave(pop_filerc, std::ref(file_q));
+                        fileSave.detach();
+                        elapsedTime = interval; // refresh file queue display
+                    }
+                }
+                else if (discard_btn.getGlobalBounds().contains(mousePos.x, mousePos.y))
+                {
+                    if (!file_q.empty())
+                    {
+                        file_q.pop();
+                        elapsedTime = interval; // refresh file queue display
+                    }
+                }
             }
             if (event.type == sf::Event::KeyPressed)
                 switch (event.key.scancode)
@@ -166,6 +197,28 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
                 }
         }
 
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        // std::cout << "x:" << mousePos.x << ", y:" << mousePos.y <<'\n';
+        if (accept_btn.getGlobalBounds().contains(mousePos.x, mousePos.y))
+        {
+            // std::cout << "accept\n";
+            accept_btn.setFillColor(sf::Color(0x33FF33FF));
+        }
+        else
+        {
+            accept_btn.setFillColor(sf::Color(0x00FF00FF));
+        }
+
+        if (discard_btn.getGlobalBounds().contains(mousePos.x, mousePos.y))
+        {
+            // std::cout << "discard\n";
+            discard_btn.setFillColor(sf::Color(0xFF3333FF));
+        }
+        else
+        {
+            discard_btn.setFillColor(sf::Color(0xFF0000FF));
+        }
+
         // Clear, draw, and display
         window.clear(sf::Color(MODE_SEND ? SETTINGS.sendbgcolor : SETTINGS.recvbgcolor));
         window.draw(fn_text);
@@ -173,6 +226,12 @@ int create_window(std::string qr_bmp, std::string url, std::queue<FileRC> &file_
         if (MODE_RECV)
         {
             window.draw(recv_file);
+            if (!queue_empty)
+            {
+                window.draw(accept_btn);
+                window.draw(discard_btn);
+                // std::cout << "BUTTONSSSSZZ\n";
+            }
         }
         window.draw(qr_spr);
 
