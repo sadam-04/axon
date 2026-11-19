@@ -45,7 +45,7 @@ export function handleChangedIP(newIP, setPresentedIp) {
 // }
 
 // perform various initialization tasks
-export const initialize = async (setUserPort, setRealPort, setPresentedIp, setSaveDir, setAddrs, setinboxItems, setSavePaths, setProtocol, setTLSKeyPath, setTLSCertPath, setHostedFiles, setSelectedSFile, setSelectedRFile, setSelectedNavPage) => {
+export const initialize = async (setUserPort, setRealPort, setPresentedIp, setSaveDir, setAddrs, setinboxItems, setSavePaths, setProtocol, setTLSKeyPath, setTLSCertPath, setHostedFiles, setSelectedSFile, setSelectedRFile, setSelectedNavPage, setProtocolMessage) => {
 
     // prevent drag and dropping other urls
     window.addEventListener("dragover", event => {
@@ -76,13 +76,14 @@ export const initialize = async (setUserPort, setRealPort, setPresentedIp, setSa
     let addrs = await configAPI.listAddrs();
     setAddrs(addrs);
 
-    // configAPI.onAlert(msg => {
-    //   console.log("ALERT: " + msg);
-    // });
-
     configAPI.onRealPortUpdate((val) => {
-      setRealPort(val);
-    })
+      if (val == -1) {
+        setProtocolMessage("Failed to bind port!");  
+      } else {
+        setProtocolMessage("");
+        setRealPort(val);
+      }
+    });
 
     outboxAPI.onUpdate((items, ctx) => {
       setHostedFiles(items);
@@ -96,7 +97,7 @@ export const initialize = async (setUserPort, setRealPort, setPresentedIp, setSa
           } else if (ctx.delIdx < ctx.selIdx) {
             setSelectedSFile((old)=>{
               return old - 1;
-            })
+            });
           }
         }
       }
@@ -132,12 +133,17 @@ export const initialize = async (setUserPort, setRealPort, setPresentedIp, setSa
     // get saved values for settings fields from last session
     let tlsKeyPath = await configAPI.getTLSKeyPath();
     setTLSKeyPath(tlsKeyPath);
+    
     let tlsCertPath = await configAPI.getTLSCertPath();
     setTLSCertPath(tlsCertPath);
+    
     let savedUserPort = await configAPI.getUserPort();
     setUserPort(savedUserPort);
+    
     let savedRealPort = await configAPI.getRealPort();
+    if (savedRealPort == -1) {setProtocolMessage("Failed to bind port!");}
     setRealPort(savedRealPort);
+    
     let savedSaveDir = await configAPI.getSaveDir();
     setSaveDir(savedSaveDir);
   }
