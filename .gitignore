@@ -93,3 +93,6 @@ out/
 
 uploads/*
 /cert
+
+key.pem
+cert.pem
